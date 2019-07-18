@@ -57,9 +57,13 @@ set foldtext=FoldText()
 " Toggle expand tab
 nnoremap <silent> <Leader>t :set expandtab!<CR>
 
+" Remove whitespace on current line
+nnoremap <silent> <Leader>s m':.s/\s\+$//<CR>`'
+
+
 " Various tab related keyboard shortcuts
-nnoremap tj <Esc>:tabnext<CR>
-nnoremap tk <Esc>:tabprevious<CR>
+nnoremap tj <Esc>:tabprevious<CR>
+nnoremap tk <Esc>:tabnext<CR>
 nnoremap td <Esc>:tabclose<CR>
 nnoremap th <Esc>:tabfirst<CR>
 nnoremap tl <Esc>:tablast<CR>
