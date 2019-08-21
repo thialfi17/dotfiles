@@ -1,158 +1,162 @@
 syntax on
-
-"
-" Set options
-"
-
-set number
-set backspace=indent,eol,start
-set path=.,,**
-set hidden
-set laststatus=2
 set noic
-set scrolloff=3
-
-" Display column for indicating which lines are part of a fold
-set foldcolumn=1
-
-" Display whitespace characters
-set list
-" Characters to use
-set listchars=tab:..,trail:_
-" Character to use on wrapped lines
-set showbreak=>\ 
-
-" Set undo directory
-set undodir=$HOME/.vim/undodir
-" Store undos in a file making them persistent
-set undofile
-
-" Tab Stop
-set tabstop=4
-" Shift Width
-set shiftwidth=4
-
-" Set autocomplete in command menu
-set wildmenu
+set ruler
+set hlsearch
+set number
+set backspace=indent,start
+set wrap linebreak
 set wildmode=longest,list
-
-" Show partially typed commands
+set wildmenu
+set history=1000
+set laststatus=2
+set hidden
 set showcmd
-
-" Smart indentation
 set autoindent
-
-" Prevent vim from changing options like the current working directory when
-" opening files with a saved view
-set viewoptions=folds
+set cursorcolumn
+set scrolloff=10
 set viewdir=$HOME/.vim/view
 
-" Custom fold text function to always display the most useful first line
+set foldcolumn=1
+set foldmethod=manual
+set foldexpr=FoldExpr()
 set foldtext=FoldText()
+set foldenable
 
-"
-" Key mappings
-"
-
-" Toggle expand tab
-nnoremap <silent> <Leader>t :set expandtab!<CR>
+set splitright
+set splitbelow
 
 " Remove whitespace on current line
 nnoremap <silent> <Leader>s m':.s/\s\+$//<CR>`'
 
+" Save and load view (includes arglist)
+nnoremap <silent> <Leader>vs :mkview<CR>:echom "Saved view"<CR>
+nnoremap <silent> <Leader>vl :loadview<CR>:echom "Loaded view"<CR>
 
-" Various tab related keyboard shortcuts
-nnoremap tj <Esc>:tabprevious<CR>
-nnoremap tk <Esc>:tabnext<CR>
-nnoremap td <Esc>:tabclose<CR>
-nnoremap th <Esc>:tabfirst<CR>
-nnoremap tl <Esc>:tablast<CR>
-nnoremap tn <Esc>:tabnew<Space>
-nnoremap tt <Esc>:tabedit<Space>
-nnoremap tm <Esc>:tabm<Space>
+" cd to current file
+nnoremap <silent> <Leader>tcd :tcd %:p:h<CR>
+nnoremap <silent> <Leader>lcd :lcd %:p:h<CR>
+nnoremap <silent> <Leader>cd :cd %:p:h<CR>
 
-" Bind F5 to save file if modified and execute python script in a buffer.
-nnoremap <silent> <F5> :call SaveAndExecutePython()<CR>
-vnoremap <silent> <F5> :<C-u>call SaveAndExecutePython()<CR>
+" set foldmethod to expr
+nnoremap <silent> <Leader>fe :setlocal foldmethod=expr<CR>
 
-"
-" Autocommands
-"
+" Make it so // searches for selected text
+vnoremap // y/<C-R>"<CR>
 
-augroup ReloadVimRC
+" Open vimrc
+nnoremap <silent> <F4> :tabe $MYVIMRC<CR>
+
+" Arglist
+nnoremap <F6> :args<CR>:argument 
+nnoremap <F7> :tabs<CR>
+
+" Column guidelines
+nnoremap <silent> <Leader>go :set cc=113<CR>
+nnoremap <silent> <Leader>gO :set cc=<CR>
+
+" Highlight lines over certain length
+augroup Settings
     autocmd!
-    autocmd BufWritePost $MYVIMRC source $MYVIMRC
+    autocmd ColorScheme *
+        \ highlight ExtraWhitespace cterm=bold ctermbg=1 guibg=Red |
+        \ highlight ColorColumn ctermbg=0 |
+        \ highlight Post80 ctermbg=0 |
+        \ highlight OverLength ctermbg=darkgrey cterm=bold guibg=gray30
 augroup END
 
-augroup SaveView
+set showbreak=\ 
+set listchars=tab:..,trail:_,extends:>,precedes:<,nbsp:~
+set list!
+
+" augroup SaveView
+"     autocmd!
+"     autocmd BufWrite * mkview
+"     autocmd BufWinEnter * silent! loadview
+" augroup END
+
+
+" augroup Whitespace
+"     autocmd!
+"     autocmd ColorScheme * highlight ExtraWhitespace cterm=bold ctermbg=1 guibg=Red
+"     autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+"     autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+"     autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+"     autocmd BufWinLeave * call clearmatches()
+" augroup END
+
+set tabstop=4
+set shiftwidth=4
+nnoremap <silent> <Leader>t :set expandtab!<CR>:echom "Toggled expand tab"<CR>
+nnoremap <Leader>tlo :set showtabline=1<CR>
+nnoremap <Leader>tlO :set showtabline=0<CR>
+
+set undodir=~/.vim/undodir
+set undofile
+
+if &term == 'xterm'
+        set t_SH=
+endif
+
+" Terminal escape
+tnoremap <Esc><Esc> <C-\><C-n>
+
+nnoremap <Leader><C-w>t <C-w>t
+
+nnoremap <Leader>r yiw:%s/\V\<"\>//gc
+
+noremap <C-j> :tabprevious<CR>
+noremap <C-k> :tabnext<CR>
+noremap <C-h> :prev<CR>
+noremap <C-l> :next<CR>
+noremap <C-p> :vne<CR>:setlocal buftype=nofile bufhidden=wipe noswapfile<CR>
+
+nnoremap  mz0i//<Esc>`zll
+nnoremap  mz0xx<Esc>`zhh
+vnoremap  mz0I//<Esc>`zll
+
+nnoremap <F5> :buffers<CR>:buffer<Space>
+nnoremap <C-w>t :split<CR><C-w>T
+
+nnoremap n nzz
+nnoremap N Nzz
+
+augroup Buffers
     autocmd!
-    autocmd BufWrite * mkview
-    autocmd BufWinEnter * silent! loadview
+    au BufEnter *.v :set syntax=verilog
+    au FileType systemverilog,verilog :call Matches()
+    au FileType systemverilog,verilog :set list
+    au BufEnter *.sv,*.i :set syntax=systemverilog
+    au BufWritePost $MYVIMRC nested source $MYVIMRC
+    au BufNewFile,BufRead,BufEnter *.v,*.sv hi! link verilogLabel Statement
 augroup END
 
-"
-" Functions
-"
+command DiffOrig vert new | set bt=nofile bh=wipe | r # | 0d_ | diffthis
+    \ | wincmd p | diffthis
 
-function! SaveAndExecutePython()
-    " SOURCE [reusable window]: https://github.com/fatih/vim-go/blob/master/autoload/go/ui.vim
-
-    " save and reload current file
-    silent execute "update | edit"
-
-    " get file path of current file
-    let s:current_buffer_file_path = expand("%")
-
-    let s:output_buffer_name = "Python"
-    let s:output_buffer_filetype = "output"
-
-    " reuse existing buffer window if it exists otherwise create a new one
-    if !exists("s:buf_nr") || !bufexists(s:buf_nr)
-        silent execute 'botright new ' . s:output_buffer_name
-        let s:buf_nr = bufnr('%')
-    elseif bufwinnr(s:buf_nr) == -1
-        silent execute 'botright new'
-        silent execute s:buf_nr . 'buffer'
-    elseif bufwinnr(s:buf_nr) != bufwinnr('%')
-        silent execute bufwinnr(s:buf_nr) . 'wincmd w'
+set diffexpr=MyDiff()
+function! MyDiff()
+    let opt = ""
+    if exists("g:diffignore") && g:diffignore != ""
+        let opt = "-I " . g:diffignore . " "
     endif
-
-    silent execute "setlocal filetype=" . s:output_buffer_filetype
-    setlocal bufhidden=delete
-    setlocal buftype=nofile
-    setlocal noswapfile
-    setlocal nobuflisted
-    setlocal winfixheight
-    setlocal cursorline " make it easy to distinguish
-    setlocal nonumber
-    setlocal norelativenumber
-    setlocal showbreak=""
-
-    " clear the buffer
-    setlocal noreadonly
-    setlocal modifiable
-    %delete _
-
-    " add the console output
-    silent execute ".!python " . shellescape(s:current_buffer_file_path, 1)
-
-    " resize window to content length
-    " Note: This is annoying because if you print a lot of lines then your code buffer is forced to a height of one line every time you run this function.
-    "       However without this line the buffer starts off as a default size and if you resize the buffer then it keeps that custom size after repeated runs of this function.
-    "       But if you close the output buffer then it returns to using the default size when its recreated
-    "execute 'resize' . line('$')
-
-    " make the buffer non modifiable
-    setlocal readonly
-    setlocal nomodifiable
+    if &diffopt =~ "icase"
+        let opt = opt . "-i "
+    endif
+    if &diffopt =~ "iwhite"
+        let opt = opt . "-b "
+    endif
+    silent execute "!diff -a --binary " . opt . v:fname_in . " " .
+        \ v:fname_new . " > " . v:fname_out
 endfunction
+
+colorscheme ron
 
 " Stolen from: https://www.reddit.com/r/vim/comments/c18895/foldtext_align_number_of_lines_on_righthand/erdx7b2?utm_source=share&utm_medium=web2x
 function! FoldText()
     " set the max number of nested fold levels + 1
     let fnum = 3
     " set the max number of digits in the number folded lines
-    let nnum = 4
+    let nnum = 3
 
     let char = matchstr(&fillchars, 'fold:\zs.')
     let lnum = v:foldend - v:foldstart + 1
@@ -170,15 +174,52 @@ function! FoldText()
         let offset = offset + 1
     endwhile
 
-    echo line
-
     " extract the folding text from the folding line
     let txta = substitute(line,'^[^a-zA-Z0-9\t ]* \(.*\)', '\1', '')
     let txta = substitute(txta,'^   \(.*\)','\1','')
 
     let txta = ' ' . txta . ' '
-    let txtb = '[' . spac . lnum . ' lines]'
+    let txtb = '[' . spac . lnum . ' lines ]'
     let fill = repeat(char, winwidth(0) - fnum - len(txta . txtb) - &foldcolumn - (&number ? &numberwidth : 0))
 
     return plus . dash . txta . fill . txtb
+endfunction
+
+function! FoldExpr()
+    let current_line = getline(v:lnum)
+    let previous_line = getline(v:lnum - 1)
+    let previous2_line = getline(v:lnum - 2)
+    let next_line = getline(v:lnum + 1)
+    let next2_line = getline(v:lnum + 2)
+    let next3_line = getline(v:lnum + 3)
+
+    let header_comment = '^\s*\/\/-\+'
+    let just_comment_line = '^\s*\/\/$'
+    let comment_line = '^\s*\/\/'
+    let comment_not_header = '^\s*\/\/\([^-].*\)\=$'
+    let empty_line = '^\s*$'
+    let not_empty_line = '^.\+$'
+    let not_comment_line = '^\s*\w'
+
+    if current_line =~ header_comment && next2_line =~ header_comment
+        return ">2"
+    elseif current_line =~ comment_not_header && previous_line =~ comment_not_header
+        return "="
+    elseif current_line =~ empty_line && next_line =~ just_comment_line && next2_line =~ comment_line
+        return "s1"
+    elseif current_line =~ empty_line && next_line =~ empty_line && next2_line =~ empty_line
+        return "1"
+    elseif current_line =~ not_empty_line && next_line =~ empty_line && next2_line =~ empty_line
+        return "s1"
+    elseif current_line =~ comment_not_header && next_line =~ comment_not_header && next2_line =~ comment_not_header
+        return "a1"
+    else
+        return "="
+    endif
+endfunction
+
+function! Matches()
+    call clearmatches()
+    let w:over_length_match = matchadd("Post80", '\%>113v.\+', -1)
+    let w:extra_whitespace_match = matchadd("ExtraWhitespace", '\s\+$')
 endfunction
