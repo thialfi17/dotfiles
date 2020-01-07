@@ -1,19 +1,19 @@
-Xft.dpi: 140
+!!Xft.dpi: 140
 Xft.antialias: true
 Xft.hinting:   true
 Xft.rgba:      rgb
-Xft.autohint:  false
-Xft.hintstyle: hintslight
-Xft.lcdfilter: lcddefault
-
+!!Xft.autohint:  false
+!!Xft.hintstyle: hintslight
+!!Xft.lcdfilter: lcddefault
+!!
 XTerm*background:        #222D31
 XTerm*foreground:        #d8d8d8
-XTerm*pointerColor:      #1ABB9B
-XTerm*faceName:          Fixed
-XTerm*faceSize:          11
-XTerm*reverseVideo:      on
-XTerm*selectToClipboard: true
-
+!!XTerm*pointerColor:      #1ABB9B
+!!XTerm*faceName:          Fixed
+!!XTerm*faceSize:          11
+!!XTerm*reverseVideo:      on
+!!XTerm*selectToClipboard: true
+!!
 !! Nethack Stuff
 !!XTerm*eightBitInput: true
 !!Urxvt*meta8: true
@@ -26,40 +26,47 @@ XTerm*selectToClipboard: true
 *pointerColorBackground:          #2B2C2B
 *pointerColorForeground:          #16A085
 
-!! black dark/light
-*color0:                          #222D31
-*color8:                          #585858
+! Oxide Color scheme
+! Diki Ananta (https://github.com/dikiaap/dotfiles)
 
-!! red dark/light
-*color1:                          #ab4642
-*color9:                          #ab4642
+#define oxide_00_black      #212121
+#define oxide_01_red        #e57373
+#define oxide_02_green      #a6bc69
+#define oxide_03_yellow     #fac863
+#define oxide_04_blue       #6699cc
+#define oxide_05_magenta    #c594c5
+#define oxide_06_cyan       #5fb3b3
+#define oxide_07_white      #c0c5ce
+#define oxide_08_bright_black   #5c5c5c
+#define oxide_15_bright_white   #f3f4f5
 
-!! green dark/light
-*color2:                          #397C39
-*color10:                         #319E31
+*foreground:   oxide_07_white
+#ifdef background_opacity
+*background:   [background_opacity]oxide_00_black
+#else
+*background:   oxide_00_black
+#endif
+*cursorColor:  oxide_07_white
 
-!! yellow dark/light
-*color3:                          #f7ca88
-*color11:                         #f7ca88
-
-!! blue dark/light
-*color4:                          #7cafc2
-*color12:                         #7cafc2
-
-!! magenta dark/light
-*color5:                          #ba8baf
-*color13:                         #ba8baf
-
-!! cyan dark/light
-*color6:                          #1ABB9B
-*color14:                         #1ABB9B
-
-!! white dark/light
-*color7:                          #d8d8d8
-*color15:                         #f8f8f8
+*color0:       oxide_00_black
+*color1:       oxide_01_red
+*color2:       oxide_02_green
+*color3:       oxide_03_yellow
+*color4:       oxide_04_blue
+*color5:       oxide_05_magenta
+*color6:       oxide_06_cyan
+*color7:       oxide_07_white
+*color8:       oxide_08_bright_black
+*color9:       oxide_01_red
+*color10:      oxide_02_green
+*color11:      oxide_03_yellow
+*color12:      oxide_04_blue
+*color13:      oxide_05_magenta
+*color14:      oxide_06_cyan
+*color15:      oxide_15_bright_white
 
 Xcursor.theme: xcursor-breeze
-Xcursor.size:                     0
+Xcursor.size: 16
 
 URxvt.font:     xft:bitstream vera sans mono:size=12:antialias=true
 URxvt.boldFont: xft:bitstream vera sans mono:bold:size=12:antialias=true
