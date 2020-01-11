@@ -1,0 +1,136 @@
+OPTIONS=autopickup
+OPTIONS=pickup_types:$"?!=%*
+OPTIONS=pickup_thrown
+OPTIONS=pickup_burden:U
+
+OPTIONS=gender:male
+
+SYMBOLS=S_boulder:0
+SYMBOLS=S_golem:7
+SYMBOLS=S_ghost:8
+
+OPTIONS=showexp,showscore,time
+
+OPTIONS=confirm
+
+OPTIONS=hilite_pet,hilite_pile
+
+OPTIONS=hitpointbar
+
+OPTIONS=!implicit_uncursed
+OPTIONS=lit_corridor,dark_room
+#OPTIONS=lootabc
+
+OPTIONS=color,menucolors
+
+MENUCOLOR="cursed"=red
+MENUCOLOR="unholy"=red
+MENUCOLOR="blessed"=cyan
+MENUCOLOR="holy"=cyan
+MENUCOLOR="uncursed"=green
+
+# Status Highlights
+OPTIONS=statushilites:10 # will hilite changes in status for 10 turns
+
+# Always show gold as the proper color.
+OPTIONS=hilite_status:gold/always/yellow
+
+# Show when XL changes.
+OPTIONS=hilite_status:experience-level/changed/white/always/cyan
+
+# Specify multiple cutoffs for all ability scores.
+OPTIONS=hilite_status:characteristics/<5/red
+OPTIONS=hilite_status:characteristics/>6/orange
+OPTIONS=hilite_status:characteristics/>8/brown
+OPTIONS=hilite_status:characteristics/>11/yellow
+OPTIONS=hilite_status:characteristics/>13/green
+OPTIONS=hilite_status:characteristics/>16/cyan
+OPTIONS=hilite_status:characteristics/>18/lightblue
+
+OPTIONS=hilite_status:characteristics/down/red&inverse
+OPTIONS=hilite_status:characteristics/up/green&inverse
+
+# Hilight multiple encumbrance statuses.
+OPTIONS=hilite_status:carrying-capacity/burdened/yellow/stressed/orange
+
+# Percentage cutoffs for hitpoints.
+OPTIONS=hilite_status:hitpoints/100%/brightgreen
+OPTIONS=hilite_status:hitpoints/<100%/green
+OPTIONS=hilite_status:hitpoints/<60%/yellow
+OPTIONS=hilite_status:hitpoints/<40%/red
+
+# # Autopickup Exceptions
+AUTOPICKUP_EXCEPTION=">Amulet of Yendor$"
+AUTOPICKUP_EXCEPTION="<Amulet of Yendor named"
+
+AUTOPICKUP_EXCEPTION=">scroll of scare monster"
+AUTOPICKUP_EXCEPTION=">scroll called scare monster"
+
+AUTOPICKUP_EXCEPTION=":0¥)"
+AUTOPICKUP_EXCEPTION="> named empty"
+
+# autopickup_exception="<full healing"
+# autopickup_exception="<potion of extra healing"
+# autopickup_exception="<potion of healing"
+# autopickup_exception="<gain level"
+
+
+
+AUTOPICKUP_EXCEPTION="> loadstone[^<]*$"
+AUTOPICKUP_EXCEPTION="<stone called luck"
+AUTOPICKUP_EXCEPTION="< luckstone"
+# AUTOPICKUP_EXCEPTION="< touchstone"
+AUTOPICKUP_EXCEPTION="> rock[^<]*$"
+
+# #blind: glass/gems show up as gem, all else as stone.
+AUTOPICKUP_EXCEPTION="> stone[^<]*$"
+
+# # We might pick up people food, but never corpses, except lizards, newts, lichen, wraiths, or floating eyes. 
+
+AUTOPICKUP_EXCEPTION=">a corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">b corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">c corpse[^<]*$"
+
+# lizards, but not wizards or guards or lords
+AUTOPICKUP_EXCEPTION="<lizard corpse"
+AUTOPICKUP_EXCEPTION=">[^r]d corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">[^a]rd corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">[^z]ard corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">[^l]izard corpse[^<]*$"
+
+#floating eye corpse
+AUTOPICKUP_EXCEPTION="<floating eye corpse"
+AUTOPICKUP_EXCEPTION=">[^y]e corpse[^<]*$"
+
+AUTOPICKUP_EXCEPTION=">f corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">g corpse[^<]*$"
+
+# wraiths, but not Ixoth or Death
+AUTOPICKUP_EXCEPTION="<wraith corpse"
+AUTOPICKUP_EXCEPTION=">[^t]h corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">[^i]th corpse[^<]*$"
+
+AUTOPICKUP_EXCEPTION=">i corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">k corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">l corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">m corpse[^<]*$"
+
+#lichen corpse, but not all that other en stuff
+AUTOPICKUP_EXCEPTION="<lichen corpse"
+AUTOPICKUP_EXCEPTION=">[^e]n corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">[^h]en corpse[^<]*$"
+
+AUTOPICKUP_EXCEPTION=">o corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">p corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">r corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">s corpse[^<]*$"
+
+# newt
+AUTOPICKUP_EXCEPTION="<newt corpse"
+AUTOPICKUP_EXCEPTION=">[^w]t corpse[^<]*$"
+
+AUTOPICKUP_EXCEPTION=">u corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">v corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">x corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">y corpse[^<]*$"
+AUTOPICKUP_EXCEPTION=">' corpse[^<]*$"
