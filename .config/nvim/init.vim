@@ -124,15 +124,6 @@ set undofile
 " Enable mouse in all modes
 set mouse=a
 
-" Set tags to include any .tags files
-
-"   There's definitely a better way of doing this...
-
-"   Apparently you can make .vimrc's for individual directories that can be
-
-"   loaded automatically. Check exrc and also look into set path
-
-"set tags=./tags,tags,~/files/university/individual_project/nrf_SDK_16/components/tags,~/files/university/individual_project/nrf_SDK_16/config/nrf52840/tags,~/files/university/individual_project/nrf_SDK_16/external/tags,~/files/university/individual_project/nrf_SDK_16/external_tools/tags,~/files/university/individual_project/nrf_SDK_16/integration/tags,~/files/university/individual_project/nrf_SDK_16/modules/tags"
 if has('nvim')
     set background=dark
     " Start broken lines with:
@@ -232,6 +223,7 @@ let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %
 let g:fzf_tags_command = 'ctags -R'
 
 " [Commands] --expect expression for directly executing the command
+" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
@@ -243,10 +235,6 @@ command! -bang -nargs=* Ag
   \ call fzf#vim#grep(
   \   'ag -U --hidden --ignore .git/ -g ""', 1,
   \   fzf#vim#with_preview({'options':['--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':<q-args>}), <bang>0)
-"  \ call fzf#vim#grep(
-"  \   'ag --hidden -U --ignore .git/ -g '.shellescape(<q-args>), 1,
-"  \   fzf#vim#with_preview(), <bang>0)
-" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
 
 " Using floating windows of Neovim to start fzf
 if has('nvim')
@@ -262,7 +250,7 @@ if has('nvim')
                      \ 'height'   : height }
 
         let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-        "
+
         " Override the normal floating window highlighting with the ColorColumn
         " group
         call setwinvar(win, '&winhighlight', 'NormalFloat:ColorColumn')
@@ -273,19 +261,19 @@ if has('nvim')
 endif
 
 function! AgFzf(dir, fullscreen)
-  let command_fmt = 'ag -U --hidden --ignore .git/ -g %s || true'
-  let initial_command = 'ag -U --hidden --ignore .git/ -g "" || true'
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    let command_fmt = 'ag -U --hidden --ignore .git/ -g %s || true'
+    let initial_command = 'ag -U --hidden --ignore .git/ -g "" || true'
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
 function! RipgrepFzf(dir, fullscreen)
-  let command_fmt = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" %s || true'
-  let initial_command = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" || true'
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
-  call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+    let command_fmt = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" %s || true'
+    let initial_command = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" || true'
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
 endfunction
 
 function! FZFHomeCustom()
