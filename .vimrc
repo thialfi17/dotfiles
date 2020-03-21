@@ -15,6 +15,7 @@ set autoindent
 set cursorcolumn
 set scrolloff=10
 set viewdir=$HOME/.vim/view
+set expandtab
 
 set foldcolumn=1
 set foldmethod=manual
@@ -24,6 +25,18 @@ set foldenable
 
 set splitright
 set splitbelow
+
+set mouse=a
+
+" Disable movement keys since I'm getting into bad habits
+noremap <Left> <nop>
+noremap <Right> <nop>
+noremap <Down> <nop>
+noremap <Up> <nop>
+noremap [1~ <nop>
+noremap [4~ <nop>
+noremap [5~ <nop>
+noremap [6~ <nop>
 
 " Remove whitespace on current line
 nnoremap <silent> <Leader>s m':.s/\s\+$//<CR>`'
@@ -109,10 +122,6 @@ noremap <C-k> :tabnext<CR>
 noremap <C-h> :prev<CR>
 noremap <C-l> :next<CR>
 noremap <C-p> :vne<CR>:setlocal buftype=nofile bufhidden=wipe noswapfile<CR>
-
-nnoremap  mz0i//<Esc>`zll
-nnoremap  mz0xx<Esc>`zhh
-vnoremap  mz0I//<Esc>`zll
 
 nnoremap <F5> :buffers<CR>:buffer<Space>
 nnoremap <C-w>t :split<CR><C-w>T

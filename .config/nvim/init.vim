@@ -17,12 +17,15 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'chriskempson/base16-vim'
 Plug 'w0ng/vim-hybrid'
 "Plug 'majutsushi/tagbar'
-Plug 'LucHermitte/lh-vim-lib'
-Plug 'LucHermitte/local_vimrc'
+Plug 'embear/vim-localvimrc'
+"Plug 'LucHermitte/lh-vim-lib'
+"Plug 'LucHermitte/local_vimrc'
 Plug 'kshenoy/vim-signature'
 
 " Cool symbols for files
 Plug 'ryanoasis/vim-devicons'
+
+Plug 'lervag/vimtex'
 
 " Text alignment
 Plug 'godlygeek/tabular'
@@ -134,9 +137,13 @@ if has('nvim')
 else
 endif
 
+" Fix issues due to icons and re-sourcing the vim config
+if exists('g:loaded_webdevicons')
+    tabdo call webdevicons#refresh()
+endif
+
 " Key bindings
 nnoremap <Space> :
-cnoremap ; <CR>
 nnoremap <Leader>w :w<CR>
 
 nnoremap <silent> <Leader><Tab> :TagbarOpen fjc<CR>
@@ -159,23 +166,27 @@ nnoremap <silent> <Leader>T :Tags<CR>
 nnoremap <silent> <Leader>l :BLines<CR>
 nnoremap <silent> <Leader>L :Lines<CR>
 
+" Make searches automatically center the result
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+
 "nnoremap <silent> <Leader>F :call FZFHomeCustom()<CR>
 augroup Buffers
     autocmd!
-    au BufEnter *     :call clearmatches()
     au BufEnter *.v   :set syntax=verilog
     au BufEnter *.tex :set filetype=tex
 
-    au FileType c    call SetCOptions()
-    au FileType tex  call SetTexOptions()
-    au FileType text call Matches()
+    au BufNewFile,BufRead * if expand('%:t') !~ '\.' | set filetype=text | endif
+    " These should be moved into ftplugins
+    au FileType c    :call SetCOptions()
+    au FileType tex  :call SetTexOptions()
 
     au FileType systemverilog,verilog :set list
     au FileType fzf :silent! tunmap <Esc><Esc>
 
     au BufEnter *.sv,*.i :set syntax=systemverilog
     " nested is needed to get the colorscheme stuff to load properly
-    au BufWritePost *.vim nested source %
+    au BufWritePost init.vim nested source %
     au BufNewFile,BufRead,BufEnter *.v,*.sv hi! link verilogLabel Statement
 augroup END
 
@@ -194,8 +205,8 @@ augroup END
 " FileType specific options
 function! SetCOptions()
     setlocal foldmethod=syntax
-    map <buffer><silent> <Leader>/ :s/^/\/\//<Esc>:nohl<Esc>
-    map <buffer><silent> <Leader>? :s/\/\///<Esc>:nohl<Esc>
+    map <buffer><silent> <Leader>/ :s/^\(\s*\)/\1\/\//<Esc>:nohl<Esc>
+    map <buffer><silent> <Leader>? :s/^\(\s*\)\/\//\1/<Esc>:nohl<Esc>
 endfunction
 
 function! SetTexOptions()
@@ -204,6 +215,36 @@ function! SetTexOptions()
     setlocal spell
     map <buffer> <F5> :call CompileLatex()<CR>
 endfunction
+
+function! SetTextOptions()
+    call clearmatches()
+
+    setlocal spell
+
+"    let w:over_length_match = matchadd("Post80", '\%>113v.\+', -1)
+"    let w:extra_whitespace_match = matchadd("ExtraWhitespace", '\s\+$')
+    let w:question_match = matchadd("Todo", '\S.*?')
+    let w:todo_match = matchadd("Todo", 'TODO: .*')
+    let w:exclamation_match = matchadd("Todo", '\S.*!')
+    let w:unchecked_match = matchadd("diffRemoved", '\s* .*')
+    let w:checked_match = matchadd("diffAdded", '\s* .*')
+
+    imap <buffer><silent> :check: 
+    imap <buffer><silent> :cross: 
+
+    map <buffer><silent> <Leader>/ m`:s/^\(\s*\)\( \)\?/\1 /e<Esc>:nohl<Esc>``
+    map <buffer><silent> <Leader>? m`:s/^\(\s*\)\( \)\?/\1 /e<Esc>:nohl<Esc>``
+
+    call TextEnableCodeSnip('c','@begin c@', '@end c@', 'SpecialComment')
+    call TextEnableCodeSnip('masm','@begin asm@', '@end asm@', 'SpecialComment')
+    call TextEnableCodeSnip('java','@begin java@', '@end java@', 'SpecialComment')
+    call TextEnableCodeSnip('json','@begin json@', '@end json@', 'SpecialComment')
+endfunction
+
+" vimtex
+
+let g:vimtex_view_method="zathura"
+let g:vimtex_compiler_method="latexrun"
 
 " FZF Options
 
@@ -329,16 +370,6 @@ function! FZFWithDevIcons(options)
     call fzf#run(opts)
 endfunction
 
-function! Matches()
-    call clearmatches()
-
-    "    let w:over_length_match = matchadd("Post80", '\%>113v.\+', -1)
-
-    "    let w:extra_whitespace_match = matchadd("ExtraWhitespace", '\s\+$')
-    let w:question_match = matchadd("Todo", '\S.*?')
-    let w:todo_match = matchadd("Todo", 'TODO: .*')
-endfunction
-
 function! CompileLatex()
     execute "!pdflatex -syntex=1 -interaction=nonstopmode " . g:tex_master
     "execute "new | 0read !pdflatex -syntex=1 -interaction=nonstopmode " . g:tex_master
@@ -362,6 +393,32 @@ function! FoldText()
     let txtb = '[' . spac . lnum . ' lines ]'
     let fill = repeat(char, winwidth(0) - fnum - len(txta . txtb) - &foldcolumn - (&number ? &numberwidth : 0))
     return plus . dash . txta . fill . txtb
+endfunction
+
+function! TextEnableCodeSnip(filetype,start,end,textSnipHl) abort
+  let ft=toupper(a:filetype)
+  let group='textGroup'.ft
+  if exists('b:current_syntax')
+    let s:current_syntax=b:current_syntax
+    " Remove current syntax definition, as some syntax files (e.g. cpp.vim)
+    " do nothing if b:current_syntax is defined.
+    unlet b:current_syntax
+  endif
+  execute 'syntax include @'.group.' syntax/'.a:filetype.'.vim'
+  try
+    execute 'syntax include @'.group.' after/syntax/'.a:filetype.'.vim'
+  catch
+  endtry
+  if exists('s:current_syntax')
+    let b:current_syntax=s:current_syntax
+  else
+    unlet b:current_syntax
+  endif
+  execute 'syntax region textSnip'.ft.'
+  \ matchgroup='.a:textSnipHl.'
+  \ keepend
+  \ start="'.a:start.'" end="'.a:end.'"
+  \ contains=@'.group
 endfunction
 
 colorscheme jellybeans
