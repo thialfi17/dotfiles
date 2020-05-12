@@ -20,7 +20,7 @@ Plug 'w0ng/vim-hybrid'
 Plug 'embear/vim-localvimrc'
 "Plug 'LucHermitte/lh-vim-lib'
 "Plug 'LucHermitte/local_vimrc'
-Plug 'kshenoy/vim-signature'
+"Plug 'kshenoy/vim-signature'
 
 " Cool symbols for files
 Plug 'ryanoasis/vim-devicons'
@@ -83,7 +83,7 @@ set history=1000
 set laststatus=2
 
 " Set backspace to only work back to start of line
-set backspace=indent,start
+set backspace=indent,start,eol
 
 " Show partial commands on status line
 set showcmd
@@ -176,10 +176,11 @@ augroup Buffers
     au BufEnter *.v   :set syntax=verilog
     au BufEnter *.tex :set filetype=tex
 
-    au BufNewFile,BufRead * if expand('%:t') !~ '\.' | set filetype=text | endif
+    "au BufNewFile,BufRead * if expand('%:t') !~ '\.' | set filetype=text | endif
     " These should be moved into ftplugins
-    au FileType c    :call SetCOptions()
+    au FileType c,h  :call SetCOptions()
     au FileType tex  :call SetTexOptions()
+    au FileType make :call SetMakeOptions()
 
     au FileType systemverilog,verilog :set list
     au FileType fzf :silent! tunmap <Esc><Esc>
@@ -198,9 +199,26 @@ augroup Highlights
                       \ | highlight OverLength ctermbg=darkgrey cterm=bold guibg=khaki
                       \ | highlight FoldColumn ctermfg=110 guifg=#8fbfdc
                       \ | highlight LineNr ctermfg=215 guifg=#ffb964
+                      \ | highlight CursorLineNr ctermfg=215 guifg=#ffb964 cterm=bold
 augroup END
 
+fun! ConfirmQuit(writeFile)
+    if (a:writeFile)
+        if expand('%') == ''
+            echohl ErrorMsg | echomsg 'E32: No file name' | echohl None
+            return
+        endif
+        write
+    endif
 
+    let l:confirmed = confirm('Do you really want to quit?', "&Yes\n&No", 2)
+    if l:confirmed == 1
+        quit
+    endif
+endfun
+
+cnoremap <silent> q<CR>  :call ConfirmQuit(0)<CR>
+cnoremap <silent> wq<CR> :call ConfirmQuit(1)<CR>
 
 " FileType specific options
 function! SetCOptions()
@@ -214,6 +232,11 @@ function! SetTexOptions()
     setlocal colorcolumn=80
     setlocal spell
     map <buffer> <F5> :call CompileLatex()<CR>
+endfunction
+
+function! SetMakeOptions()
+    nmap <buffer><silent> <Leader>/ :s/^\(\s*\)/\1#/<Esc>:nohl<Esc>
+    nmap <buffer><silent> <Leader>? :s/^\(\s*\)#/\1/<Esc>:nohl<Esc>
 endfunction
 
 function! SetTextOptions()
@@ -244,7 +267,8 @@ endfunction
 " vimtex
 
 let g:vimtex_view_method="zathura"
-let g:vimtex_compiler_method="latexrun"
+" Slightly simpler compilation option that doesn't do continuous compilation
+" let g:vimtex_compiler_method="latexrun"
 
 " FZF Options
 

@@ -26,6 +26,10 @@ set $ws9   "9:  Settings"
 workspace $ws6 output DP3
 workspace $ws8 output DP3
 
+# Automatically toggle to previously used workspace when moving to same workspace again
+# Does some annoying stuff when moving a window to current workspace.
+workspace_auto_back_and_forth yes
+
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
@@ -55,88 +59,111 @@ bindsym $mod+Tab exec --no-startup-id rofi -show window
 # kill focused window
 bindsym $mod+Shift+q kill
 
-# change focus
+# Focus left
 bindsym $mod+$left  focus left
+# Focus down
 bindsym $mod+$down  focus down
+# Focus up
 bindsym $mod+$up    focus up
+# Focus right
 bindsym $mod+$right focus right
 
-# alternatively, you can use the cursor keys:
+# Focus left
 bindsym $mod+Left   focus left
+# Focus down
 bindsym $mod+Down   focus down
+# Focus up
 bindsym $mod+Up     focus up
+# Focus right
 bindsym $mod+Right  focus right
 
-# move focused window
+# Move focused window left
 bindsym $mod+Shift+$left    move left
+# Move focused window down
 bindsym $mod+Shift+$down    move down
+# Move focused window up
 bindsym $mod+Shift+$up      move up
+# Move focused window right
 bindsym $mod+Shift+$right   move right
 
-# alternatively, you can use the cursor keys:
+# Move focused window left
 bindsym $mod+Shift+Left     move left
+# Move focused window down
 bindsym $mod+Shift+Down     move down
+# move focused window up
 bindsym $mod+Shift+Up       move up
+# move focused window right
 bindsym $mod+Shift+Right    move right
 
-# move current workspace between monitors
+# Move current workspace to left workspace
 bindsym $mod+Control+$left  move workspace to output left
+# Move current workspace to bottom workspace
 bindsym $mod+Control+$down  move workspace to output down
+# Move current workspace to top workspace
 bindsym $mod+Control+$up    move workspace to output up
+# Move current workspace to right workspace
 bindsym $mod+Control+$right move workspace to output right
 
-# alternatively, you can use the cursor keys:
+# Move current workspace to left workspace
 bindsym $mod+Control+Left     move workspace to output left
+# Move current workspace to bottom workspace
 bindsym $mod+Control+Down     move workspace to output down
+# Move current workspace to top workspace
 bindsym $mod+Control+Up       move workspace to output up
+# Move current workspace to right workspace
 bindsym $mod+Control+Right    move workspace to output right
 
-# split in horizontal orientation
+# Split in horizontal orientation
 bindsym $mod+h split h
 
-# split in vertical orientation
+# Split in vertical orientation
 bindsym $mod+v split v
 
-# enter fullscreen mode for the focused container
+# Enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
-# change container layout
+# Change container layout to stacking
 bindsym $mod+s layout stacking
+# Change container layout to tabbed
 bindsym $mod+w layout tabbed
+# Change container layout to split
 bindsym $mod+e layout toggle split
 
-# toggle tiling / floating
+# Toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
 
-# change focus between tiling / floating windows
+# Change focus between tiling / floating windows
 bindsym $mod+space focus mode_toggle
 
-# focus the parent container
+# Focus the parent container
 bindsym $mod+a focus parent
 
-# focus the child container
+# Focus the child container
 bindsym $mod+Shift+a focus child
 
-# move the currently focused window to the scratchpad
+# Move the currently focused window to the scratchpad
 bindsym $mod+Shift+minus move scratchpad
 
-# show the next scratchpad window or hide the focused scratchpad window
+# Show the next scratchpad window or hide the focused scratchpad window
 bindsym $mod+minus scratchpad show
 
-# move focused floating window to the center of all outputs
+# Move focused floating window to the center of all outputs
 bindsym $mod+Shift+h move absolute position center
 
-# move focused floating window to the current position of the cursor
+# Move focused floating window to the current position of the cursor
 bindsym $mod+Shift+m move position mouse
 
-# set a window to stick to the glass
+# Set a window to stick to the glass
 bindsym $mod+Shift+s sticky toggle
 
-# shortcut to change window border
+# Shortcut to add a title and 3 pixel border
 bindsym $mod+t border normal    3
+# Shortcut to add a 3 pixel border
 bindsym $mod+y border pixel     3
+# Shortcut to remove window borders
 bindsym $mod+u border none
-# switch to workspace
+
+# Switch to workspace $num
 bindsym $mod+1 workspace $ws1
 bindsym $mod+2 workspace $ws2
 bindsym $mod+3 workspace $ws3
@@ -148,7 +175,7 @@ bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
 #bindsym $mod+0 workspace $ws10
 
-# move focused container to workspace
+# Move focused container to workspace $num
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
 bindsym $mod+Shift+3 move container to workspace $ws3
@@ -160,7 +187,7 @@ bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
 #bindsym $mod+Shift+0 move container to workspace $ws10
 
-# move focused container to workspace and follow
+# Move focused container to workspace $num and follow
 bindsym $mod+Control+1 move container to workspace $ws1; workspace $ws1
 bindsym $mod+Control+2 move container to workspace $ws2; workspace $ws2
 bindsym $mod+Control+3 move container to workspace $ws3; workspace $ws3
@@ -172,24 +199,36 @@ bindsym $mod+Control+8 move container to workspace $ws8; workspace $ws8
 bindsym $mod+Control+9 move container to workspace $ws9; workspace $ws9
 #bindsym $mod+Control+0 move container to workspace $ws10; workspace $ws10
 
-# shortcut applications
-bindsym $mod+F2                 exec gkamus
+# Switch to workspace 1 and open Firefox
 bindsym $mod+F1 workspace $ws1; exec firefox
+
+#bindsym $mod+F2                 exec gkamus
 #bindsym $mod+F3 workspace $ws3; exec chromium-browser
+#
+# Switch to workspace 4 and open Thunar
 bindsym $mod+F4 workspace $ws4; exec thunar
+# Switch to workspace 5 and open Thunderbird
 bindsym $mod+F5 workspace $ws5; exec thunderbird
+
 #bindsym $mod+F5 workspace $ws5; exec evince
+
+# Switch to workspace 6 and open Spotify
 bindsym $mod+F6 workspace $ws6; exec spotify
-bindsym $mod+F7 workspace $ws7; exec gcolor2
+
+#bindsym $mod+F7 workspace $ws7; exec gcolor2
+
+# Switch to workspace 8 and open Discord
 bindsym $mod+F8 workspace $ws8; exec discord
-bindsym $mod+F9 workspace $ws9; exec go-for-it
+
+#bindsym $mod+F9 workspace $ws9; exec go-for-it
 #bindsym Print                   exec --no-startup-id gnome-screenshot
 #bindsym $mod+Print              exec --no-startup-id gnome-screenshot -a
 #bindsym $mod+Shift+x            exec --no-startup-id i3lock-fancy -f Source-Sans-Pro
 
-bindsym --release Shift+Print exec --no-startup-id scrot -u -e 'mv $f ~/files/scrot'
-bindsym --release Print exec --no-startup-id "scrot -sf -e 'mv $f ~/files/scrot'"
-bindsym --release Control+Print exec --no-startup-id scrot -e 'mv $f ~/files/scrot'
+#bindsym --release Shift+Print exec --no-startup-id scrot -u -e 'mv $f ~/files/scrot'
+#bindsym --release Print exec --no-startup-id "scrot -sf -e 'mv $f ~/files/scrot'"
+#bindsym --release Control+Print exec --no-startup-id scrot -e 'mv $f ~/files/scrot'
+bindsym Print --release exec "scrot -sf /tmp/screenshot-$(date +%F_%T).png -e 'xclip -selection c -t image/png < $f'"
 
 # volume
 # bindsym XF86AudioLowerVolume    exec --no-startup-id amixer -q -D pulse sset Master 5%- unmute
@@ -198,58 +237,77 @@ bindsym --release Control+Print exec --no-startup-id scrot -e 'mv $f ~/files/scr
 
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
+# Raise volume
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +2% && $refresh_i3status
+# Lower volume
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -2% && $refresh_i3status
+# Mute
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+# Microphone mute
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 # Use playerctl to control audio playback
+# Play/Pause
 bindsym XF86AudioPlay exec --no-startup-id playerctl play-pause
+# Next Song
 bindsym XF86AudioNext exec --no-startup-id playerctl next
+# Previous Song
 bindsym XF86AudioPrev exec --no-startup-id playerctl previous
 
 # Use backlight buttons to adjust the backlight
+# Brightness up
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+# Brightness down
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+# Brightness up (fine)
 bindsym Shift+XF86MonBrightnessUp exec xbacklight -inc 1
+# Brightness down (fine)
 bindsym Shift+XF86MonBrightnessDown exec xbacklight -dec 1
 
-# reload the configuration file
+# Reload the configuration file
 bindsym $mod+Shift+c reload
+# Edit the configuration file
 bindsym $mod+Control+c exec alacritty --class Alacritty-floating -e nvim /home/josh/.config/i3/config
-#~/.config/i3/config"
 
-# restart i3 inplace
+# Restart i3 inplace
 bindsym $mod+Shift+r restart
 
-# manage i3 session
+# Manage i3 session
 bindsym $mod+Shift+e exec --no-startup-id i3-nagbar -t warning -f "pango:FontAwesome5Free:Hack 9" -m "Do you really want to exit?" -B "    Exit " "i3-msg exit" -B "    Lock " "pkill i3-nagbar && i3lock --nofork --color 222222 --pass-media-keys" -B "    Reboot " "pkill i3-nagbar && reboot" -B "    Shutdown " "pkill i3-nagbar && shutdown -h now"
 
-# resize window
+# Resize mode
 bindsym $mod+r mode "  "
 mode "  " {
-    # pressing left and up will shrink the window's width and height
-    # pressing right and down will grow the window's width and height
+    # Shrink the focussed window's width
     bindsym $left   resize shrink width 10 px or 10 ppt
+    # Grow the focussed window's height
     bindsym $down   resize grow height 10 px or 10 ppt
+    # Shrink the focussed window's height
     bindsym $up     resize shrink height 10 px or 10 ppt
+    # Grow the focussed window's width
     bindsym $right  resize grow width 10 px or 10 ppt
 
-    # same bindings, but for the arrow keys
+    # Shrink the focussed window's width
     bindsym Left    resize shrink width 10 px or 10 ppt
+    # Grow the focussed window's height
     bindsym Down    resize grow height 10 px or 10 ppt
+    # Shrink the focussed window's height
     bindsym Up      resize shrink height 10 px or 10 ppt
+    # Grow the focussed window's width
     bindsym Right   resize grow width 10 px or 10 ppt
 
-    # back to normal: Enter or win+r
+    # Return back to normal mode
     bindsym Return mode "default"
+    # Return back to normal mode
     bindsym Escape mode "default"
+    # Return back to normal mode
     bindsym $mod+r mode "default"
 }
 
-# resize to presets
+# Resize to presets mode
 bindsym $mod+$alt+r mode "  "
 mode "  " {
+    # Resize to preset $num
     bindsym 1 resize set  384 px  216 px, mode "default"
     bindsym 2 resize set  512 px  288 px, mode "default"
     bindsym 3 resize set  640 px  360 px, mode "default"
@@ -260,14 +318,22 @@ mode "  " {
     bindsym 8 resize set 1280 px  720 px, mode "default"
     bindsym 9 resize set 1920 px 1080 px, mode "default"
 
+    # Resize to square preset 1
     bindsym e resize set  400 px  400 px, mode "default"
+    # Resize to square preset 2
     bindsym r resize set  768 px  768 px, mode "default"
+    # Resize to square preset 3
     bindsym t resize set  896 px  896 px, mode "default"
+    # Resize to square preset 4
     bindsym y resize set 1024 px 1024 px, mode "default"
+    # Resize to square preset 5
     bindsym u resize set 1152 px 1152 px, mode "default"
+    # Resize to square preset 6
     bindsym i resize set 1280 px 1280 px, mode "default"
 
+    # Return back to normal mode
     bindsym Return mode "default"
+    # Return back to normal mode
     bindsym Escape mode "default"
 }
 
@@ -362,51 +428,29 @@ exec --no-startup-id compton
 exec --no-startup-id pulseaudio --start
 exec --no-startup-id dunst
 
-# Create mode for controlling displays
-#set $mode_display Ext Screen (b)uilt-in ON, (e)xternal ON, (B)uilt-in OFF, (E)xternal OFF, (m)anual
-#mode "$mode_display" {
-#	bindsym b exec --no-startup-id xrandr --output eDP1 --auto, mode "default"
-#	bindsym e exec --no-startup-id xrandr --output DP1 --auto --right-of eDP1, mode "default"
-#	bindsym shift+b exec --no-startup-id xrandr --output eDP1 --auto --off, mode "default"
-#	bindsym shift+e exec --no-startup-id xrandr --output DP1 --auto --off, mode "default"
-#	bindsym m mode "$mode_pick_display"
-#
-#	bindsym Return mode "default"
-#	bindsym Escape mode "default"
-#}
+# Open display manager
 bindsym $mod+z exec ~/.local/bin/display.sh
+# Connect to external displays
 bindsym $mod+Shift+z exec "xrandr --output eDP1 --off --output DP1 --auto --right-of DP3 --output DP3 --auto && ~/.fehbg"
+# Revert back to built-in display
 bindsym $mod+Ctrl+z exec "xrandr --output eDP1 --auto --output DP1 --off --output DP3 --off"
 
+# Open calculator
 bindsym $mod+$alt+c exec alacritty --class term-calc --title Calculator -e bc /home/josh/.config/bc/.bc
+# Open programmer Dvorak cheat-sheet
 bindsym $mod+$alt+h exec feh --conversion-timeout 1 /home/josh/files/KB_Programmer_Dvorak.svg
 
+# Open power menu
 bindsym $mod+x exec ~/.local/bin/shutdown_menu
-
-#set $mode_pick_display Displays: (e)DP1 DP(1) DP(2) DP(3)
-#mode "$mode_pick_display" {
-#	bindsym e exec xrandr --output eDP1 --auto
-#	bindsym 1 exec i3-input -F "exec xrandr --output DP1 --primary --auto --%s" -P "Position (above/below/left-of/right-of): "
-#	bindsym 2 exec i3-input -F "exec xrandr --output DP2 --primary --auto --%s" -P "Position (above/below/left-of/right-of): "
-#	bindsym 3 exec i3-input -F "exec xrandr --output DP3 --primary --auto --%s" -P "Position (above/below/left-of/right-of): "
-#
-#	bindsym Shift+e exec xrandr --output eDP1 --off
-#	bindsym Shift+1 exec xrandr --output DP1 --off
-#	bindsym Shift+2 exec xrandr --output DP2 --off
-#	bindsym Shift+3 exec xrandr --output DP3 --off
-#
-#	bindsym l exec dunstify "$(xrandr | grep '\<connected\>' | awk '{print $1}')"
-#
-#	bindsym Return mode "default"
-#	bindsym Escape mode "default"
-#}
-
 
 # xss-lock grabs a logind suspend inhibit lock and will use i3lock to lock the
 # screen before suspend. Use loginctl lock-session to lock your screen.
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork --color 222222 --pass-media-keys
+# Lock screen
 bindsym $mod+0 exec loginctl lock-session
 
 # start a terminal
+# Open terminal
 bindsym $mod+Return exec alacritty
+# Open floating terminal
 bindsym $mod+Shift+Return exec alacritty --class Alacritty-floating
