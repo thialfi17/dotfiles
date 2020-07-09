@@ -1,0 +1,174 @@
+# vim: set ft=sxhkdrc
+
+#####################
+# WM controls
+#####################
+
+# Close or Kill a window
+super + {shift,ctrl} + q
+    bspc node -{c,k}
+
+# Quit or restart the wm in place
+super + shift + {Delete,r}
+    bspc {quit 1,wm -r}
+
+# Reload keyboard shortcuts
+super + shift + c
+    pkill -USR1 -x sxhkd
+
+# Move to desktop 1-10
+super + shift + {1-9,0}
+    bspc node -d '^{1-9,10}'
+
+# Change desktop and have auto-back-and-forth like effect
+super + {1-9,0}
+    desktop='^{1-9,10}'; \
+    bspc query -D -d "$desktop.focused" && bspc desktop -f last || bspc desktop -f "$desktop"
+
+# Cycle between desktops that are in use
+super + {_,shift +} Tab
+    bspc desktop -f {next,prev}.occupied
+
+# Go to the last used desktop
+super + minus
+    bspc desktop -f last
+
+# Swap between monocle mode and tiled mode
+super + t
+    bspc desktop -l next
+
+#####################
+# Window Controls
+#####################
+
+# Focus next node
+alt + Tab
+    bspc node -f next.local
+
+# Focus previous node
+alt + shift + Tab
+    bspc node -f prev.local
+
+# focus the older or newer node in the focus history
+super + {o,i}
+    bspc wm -h off; \
+    bspc node {older,newer} -f; \
+    bspc wm -h on
+
+# Move current node to biggst spot in desktop
+super + g
+    bspc node -s biggest.local
+
+# Toggle floating for current node
+super + shift + space
+    bspc node -t ~floating
+
+# Toggle pseudo_tiled for current node
+super + ctrl + space
+    bspc node -t ~pseudo_tiled
+
+# Toggle fullscreen for current node
+super + f
+    bspc node -t ~fullscreen
+
+# Preselect direction for splits
+super + shift + {h,j,k,l}
+    bspc node --presel-dir ~{west,south,north,east}
+
+# Choose preselect ratio
+super + ctrl + {1-9}
+    bspc node -o 0.{1-9}
+
+# Focus windows
+super + {h,j,k,l}
+    bspc node -f {west,south,north,east}
+    #bspc node -f {west || bspc node -f east,south || bspc node -f north,north || bspc node -f south,east || bspc node -f west}
+
+# Move windows
+super + ctrl + {h,j,k,l}
+    bspc node -s {west,south,north,east}
+
+# Move window into preselect
+super + m
+    bspc node -n 'last.!automatic'
+
+# Grow node
+super + alt + {h,j,k,l}
+    bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+
+# Shrink node
+super + alt + shift + {h,j,k,l}
+    bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+
+# Change window gap
+super + shift + {minus,equal}
+    bspc config -d focused window_gap $((`bspc config -d focused window_gap` {-,+} 1))
+
+# rotate the node
+super + r
+    bspc node @/ -C forward
+
+#####################
+# Programs
+#####################
+
+super + d
+    rofi -show run
+
+super + F1
+    firefox
+
+super + F4
+    thunar
+
+super + Return
+    alacritty
+
+super + shift + Return
+    bspc rule -a Alacritty -o state=floating && alacritty
+
+ctrl + shift + Escape
+    alacritty --class htop -e htop
+
+ctrl + alt + Delete
+    i3lock -e -k -i ~/pictures/wallpapers/moon_4k.jpg -c 222222 --wrongtext= --veriftext= --noinputtext= --ringcolor ba687f --datecolor cccccc --timecolor cccccc --indicator --insidecolor 000000aa --insidevercolor 000000aa --ringvercolor 473f6e --insidewrongcolor 000000aa --ringwrongcolor cc0000 --keyhlcolor 00000000 --separatorcolor 00000000 --bshlcolor 00000000 --pass-media-keys --timestr="%H:%M:%S" --datestr="%a %b %d %Y"
+    #i3lock --nofork --color 222222 --pass-media-keys
+
+super + x
+    ~/.local/bin/shutdown_menu
+
+#####################
+# Media Keys and Backlight
+#####################
+
+{super + apostrophe,XF86AudioPlay}
+    playerctl play-pause
+
+{super + bracketright,XF86AudioNext}
+    playerctl next
+
+{super + bracketleft,XF86AudioPrev}
+    playerctl previous
+
+XF86AudioMute
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+XF86Audio{Lower,Raise}Volume
+    pactl set-sink-volume @DEFAULT_SINK@ {-,+}2%
+
+# Brightness up
+{super + period,XF86MonBrightnessUp}
+    xbacklight -inc 10
+
+# Brightness down
+{super + comma,XF86MonBrightnessDown}
+    xbacklight -dec 10
+
+# Brightness up (fine)
+shift + {super + period,XF86MonBrightnessUp}
+    xbacklight -inc 1
+bindsym $mod+Shift+period exec xbacklight -inc 1
+
+# Brightness down (fine)
+shift + {super + comma,XF86MonBrightnessDown}
+    xbacklight -dec 1
