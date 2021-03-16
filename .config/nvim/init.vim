@@ -202,24 +202,6 @@ augroup Highlights
                       \ | highlight CursorLineNr ctermfg=215 guifg=#ffb964 cterm=bold
 augroup END
 
-fun! ConfirmQuit(writeFile)
-    if (a:writeFile)
-        if expand('%') == ''
-            echohl ErrorMsg | echomsg 'E32: No file name' | echohl None
-            return
-        endif
-        write
-    endif
-
-    let l:confirmed = confirm('Do you really want to quit?', "&Yes\n&No", 2)
-    if l:confirmed == 1
-        quit
-    endif
-endfun
-
-cnoremap <silent> q<CR>  :call ConfirmQuit(0)<CR>
-cnoremap <silent> wq<CR> :call ConfirmQuit(1)<CR>
-
 " FileType specific options
 function! SetCOptions()
     setlocal foldmethod=syntax
