@@ -5,19 +5,14 @@ call plug#begin('~/.local/share/nvim/site/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 
 
-" Add fzf fuzzy file finder
-Plug '/usr/share/fzf'
-Plug 'junegunn/fzf.vim'
-
-
 " colorscheme
 
 "Plug 'wombat256mod.vim'
 Plug 'nanotech/jellybeans.vim'
-Plug 'chriskempson/base16-vim'
-Plug 'w0ng/vim-hybrid'
+"Plug 'chriskempson/base16-vim'
+"Plug 'w0ng/vim-hybrid'
 "Plug 'majutsushi/tagbar'
-Plug 'embear/vim-localvimrc'
+"Plug 'embear/vim-localvimrc'
 "Plug 'LucHermitte/lh-vim-lib'
 "Plug 'LucHermitte/local_vimrc'
 "Plug 'kshenoy/vim-signature'
@@ -143,28 +138,18 @@ if exists('g:loaded_webdevicons')
 endif
 
 " Key bindings
-nnoremap <Space> :
 nnoremap <Leader>w :w<CR>
 
 nnoremap <silent> <Leader><Tab> :TagbarOpen fjc<CR>
 noremap  <silent> <F9>          :TagbarToggle<CR>
 
-noremap <silent> <C-j> :tabprevious<CR>
-noremap <silent> <C-k> :tabnext<CR>
-noremap <silent> <C-h> :prev<CR>
-noremap <silent> <C-l> :next<CR>
+"noremap <silent> <C-j> :tabprevious<CR>
+"noremap <silent> <C-k> :tabnext<CR>
+"noremap <silent> <C-h> :prev<CR>
+"noremap <silent> <C-l> :next<CR>
 
 " Make escaping from terminals easier
 tnoremap <silent> <Esc><Esc> <C-\><C-n>
-
-" Shortcut for FZF
-nnoremap <silent> <Leader>f :FZF<CR>
-nnoremap <silent> <Leader>g :GitFiles<CR>
-nnoremap <silent> <Leader>F :FZF ~<CR>
-nnoremap <silent> <Leader>t :BTags<CR>
-nnoremap <silent> <Leader>T :Tags<CR>
-nnoremap <silent> <Leader>l :BLines<CR>
-nnoremap <silent> <Leader>L :Lines<CR>
 
 " Make searches automatically center the result
 nnoremap <silent> n nzz
@@ -251,130 +236,6 @@ endfunction
 let g:vimtex_view_method="zathura"
 " Slightly simpler compilation option that doesn't do continuous compilation
 " let g:vimtex_compiler_method="latexrun"
-
-" FZF Options
-
-" Reverse the layout to make the FZF list top-down
-let $FZF_DEFAULT_OPTS='--layout=reverse'
-
-" Change default command to ag
-let $FZF_DEFAULT_COMMAND='ag --hidden --ignore .git/ -U -g ""'
-
-" [Buffers] Jump to the existing window if possible
-let g:fzf_buffers_jump = 1
-
-" [[B]Commits] Customize the options used by 'git log':
-let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
-
-" [Tags] Command to generate tags file
-let g:fzf_tags_command = 'ctags -R'
-
-" [Commands] --expect expression for directly executing the command
-" let g:fzf_commands_expect = 'alt-enter,ctrl-x'
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --no-ignore-vcs --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'options':['--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up']}), <bang>0)
-
-command! -bang -nargs=* AG call AgFzf(<q-args>, <bang>0)
-command! -bang -nargs=* Ag
-  \ call fzf#vim#grep(
-  \   'ag -U --hidden --ignore .git/ -g ""', 1,
-  \   fzf#vim#with_preview({'options':['--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':<q-args>}), <bang>0)
-
-" Using floating windows of Neovim to start fzf
-if has('nvim')
-    let $FZF_DEFAULT_OPTS .= ' --border --margin=0,2'
-
-    function! FloatingFZF()
-        let width  = float2nr(&columns * 0.8)
-        let height = float2nr(&lines * 0.9)
-        let opts   = { 'relative' : 'editor',
-                     \ 'row'      : ( &lines   - height ) / 2,
-                     \ 'col'      : ( &columns -  width ) / 2,
-                     \ 'width'    : width,
-                     \ 'height'   : height }
-
-        let win = nvim_open_win(nvim_create_buf(v:false, v:true), v:true, opts)
-
-        " Override the normal floating window highlighting with the ColorColumn
-        " group
-        call setwinvar(win, '&winhighlight', 'NormalFloat:ColorColumn')
-    endfunction
-
-    " Using the custom window creation function
-    let g:fzf_layout = { 'window': 'call FloatingFZF()' }
-endif
-
-function! AgFzf(dir, fullscreen)
-    let command_fmt = 'ag -U --hidden --ignore .git/ -g %s || true'
-    let initial_command = 'ag -U --hidden --ignore .git/ -g "" || true'
-    let reload_command = printf(command_fmt, '{q}')
-    let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
-    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-function! RipgrepFzf(dir, fullscreen)
-    let command_fmt = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" %s || true'
-    let initial_command = 'rg --no-ignore-vcs --column --line-number --no-heading --color=always --smart-case --iglob "!.git/" || true'
-    let reload_command = printf(command_fmt, '{q}')
-    let spec = {'options': ['--phony', '--bind', 'change:reload:'.reload_command, '--bind','ctrl-d:preview-page-down,ctrl-u:preview-page-up'], 'dir':a:dir}
-    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-function! FZFHomeCustom()
-    call fzf#run(fzf#wrap({
-        'source'  : 'ag -U --ignore .git/ --ignore packages -g ""',
-        'dir'     : '~',
-        'options' : ['--ansi','--multi','--nth','2..,..','--tiebreak=index','--prompt','~/']
-    }))
-endfunction
-
-function! FZFWithDevIcons(options)
-    let l:fzf_files_options = [' -m --bind ctrl-d:preview-page-down,ctrl-u:preview-page-up --preview "',
-        fzf#shellescape("/home/josh/.local/share/nvim/site/plugged/fzf.vim/bin/preview.sh").' {2..}"']
-
-    function! s:files(opts)
-        echom a:opts['source'] . " " . a:opts['dir']
-        let l:files = split(system(a:opts['source'] . " " . a:opts['dir']), '\n')
-        return s:prepend_icon(l:files)
-    endfunction
-
-    function! s:prepend_icon(candidates)
-        let result = []
-        for candidate in a:candidates
-            let filename = fnamemodify(candidate, ':p:t')
-            let icon = WebDevIconsGetFileTypeSymbol(filename, isdirectory(filename))
-            call add(result, printf("%s %s", icon, fnamemodify(copy(candidate), ":~:.")))
-        endfor
-        return result
-    endfunction
-
-    function! s:edit_file(items)
-        let items = a:items
-        let i     = 1
-        let ln    = len(items)
-
-        while i < ln
-            let item      = items[i]
-            let parts     = split(item, ' ')
-            let file_path = get(parts, 1, '')
-            let items[i]  = file_path
-            let i        += 1
-        endwhile
-
-        call s:Sink(items)
-    endfunction
-
-    let opts           = fzf#wrap(a:options)
-    let opts.source    = <sid>files(opts)
-    let s:Sink         = opts['sink*']
-    let opts['sink*']  = function('s:edit_file')
-    let opts.options  .= join(l:fzf_files_options)
-
-    call fzf#run(opts)
-endfunction
 
 function! CompileLatex()
     execute "!pdflatex -syntex=1 -interaction=nonstopmode " . g:tex_master
