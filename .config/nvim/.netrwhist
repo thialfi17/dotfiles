@@ -1,0 +1,6 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/etc/polkit-1/rules.d'
+let g:netrw_dirhist_3='/home/josh/.config/zsh'
+let g:netrw_dirhist_2='/home/josh/.config/sxhkd'
+let g:netrw_dirhist_1='/home/josh/.config/polybar'
