@@ -45,3 +45,5 @@ opt('b', 'tabstop', 4)
 opt('b', 'shiftwidth', 4)
 opt('b', 'expandtab', true)
 opt('b', 'undofile', true)
+
+vim.api.nvim_set_var('python_recommended_style', 0)

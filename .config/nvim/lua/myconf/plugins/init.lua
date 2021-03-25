@@ -10,6 +10,7 @@ local paq = require('paq-nvim').paq
 -- Add other plugins
 paq {'savq/paq-nvim', opt=true}
 paq {'nvim-treesitter/nvim-treesitter'}
+paq {'nvim-treesitter/nvim-treesitter-refactor'}
 paq {'neovim/nvim-lspconfig'}
 paq {'nvim-lua/plenary.nvim'}
 paq {'nvim-lua/popup.nvim'}
