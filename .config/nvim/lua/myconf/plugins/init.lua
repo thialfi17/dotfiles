@@ -21,12 +21,18 @@ paq {'godlygeek/tabular'}
 paq {'hrsh7th/nvim-compe'}
 paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
 paq {'lewis6991/gitsigns.nvim'}
+paq {'sgur/vim-textobj-parameter'}
+paq {'AckslD/nvim-revJ.lua'}
+paq {'kana/vim-textobj-user'}
 
+-- Plugin configurations/initialisations
 require('myconf.plugins.telescope')
 require('myconf.plugins.gruvbox')
 require('myconf.plugins.treesitter')
 require('myconf.plugins.lsp-config')
 require('myconf.plugins.gitsigns')
 require('myconf.plugins.compe')
+require('revj').setup{}
 
+-- Enable colorscheme
 vim.cmd("au! VimEnter * colorscheme gruvbox")
