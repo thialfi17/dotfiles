@@ -28,7 +28,7 @@ opt('o', 'mouse', 'a')
 opt('o', 'showbreak', ' ↳')
 opt('o', 'listchars', 'tab:→ ,nbsp:⍽,trail:␣,extends:⇒,precedes:⇐')
 opt('o', 'completeopt', 'menuone,noselect')
-
+opt('o', 'statusline', '%<%f %h%m%r%=%-14.{get(b:,"gitsigns_status","")} %-14.(%l,%c%V%) %P')
 
 -- Window Options
 opt('w', 'number', true)

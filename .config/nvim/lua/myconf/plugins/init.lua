@@ -16,13 +16,17 @@ paq {'nvim-lua/plenary.nvim'}
 paq {'nvim-lua/popup.nvim'}
 paq {'nvim-telescope/telescope.nvim'}
 paq {'morhetz/gruvbox'}
---paq {'ryanoasis/vim-devicons'}
 paq {'kyazdani42/nvim-web-devicons'}
 paq {'godlygeek/tabular'}
+paq {'hrsh7th/nvim-compe'}
+paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
+paq {'lewis6991/gitsigns.nvim'}
 
 require('myconf.plugins.telescope')
 require('myconf.plugins.gruvbox')
 require('myconf.plugins.treesitter')
 require('myconf.plugins.lsp-config')
+require('myconf.plugins.gitsigns')
+require('myconf.plugins.compe')
 
 vim.cmd("au! VimEnter * colorscheme gruvbox")
