@@ -24,6 +24,7 @@ paq {'lewis6991/gitsigns.nvim'}
 paq {'sgur/vim-textobj-parameter'}
 paq {'AckslD/nvim-revJ.lua'}
 paq {'kana/vim-textobj-user'}
+paq {'lervag/vimtex'}
 
 -- Plugin configurations/initialisations
 require('myconf.plugins.telescope')
@@ -33,6 +34,9 @@ require('myconf.plugins.lsp-config')
 require('myconf.plugins.gitsigns')
 require('myconf.plugins.compe')
 require('revj').setup{}
+
+-- Configure vimtex to use the right viewer
+vim.cmd("let g:vimtex_view_method='zathura'")
 
 -- Enable colorscheme
 vim.cmd("au! VimEnter * colorscheme gruvbox")
