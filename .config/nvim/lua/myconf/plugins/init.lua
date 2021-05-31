@@ -44,9 +44,9 @@ paq {'lervag/vimtex'}
 paq {'sindrets/diffview.nvim'}
 
 -- Enable colorscheme
-vim.api.nvim_set_var('gruvbox_material_background', 'hard')
-vim.api.nvim_set_var('gruvbox_material_sign_column_background', 'none')
-vim.api.nvim_set_var('gruvbox_material_palette', 'original')
+vim.g.gruvbox_material_background = 'hard'
+vim.g.gruvbox_material_palette = 'original'
+vim.g.gruvbox_material_sign_column_background = 'none'
 vim.cmd("colorscheme gruvbox-material")
 
 -- Plugin configurations/initialisations
@@ -59,4 +59,4 @@ require('myconf.plugins.diffview')
 require('revj').setup{}
 
 -- Configure vimtex to use the right viewer
-vim.api.nvim_set_var('vimtex_view_method', 'zathura')
+vim.g.vimtex_view_method = 'zathura'

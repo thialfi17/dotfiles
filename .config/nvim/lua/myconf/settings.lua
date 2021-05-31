@@ -40,4 +40,4 @@ vim.opt.modeline = true
 vim.opt.termguicolors = true
 
 
-vim.api.nvim_set_var('python_recommended_style', 0)
+vim.g.python_recommended_style = 0
