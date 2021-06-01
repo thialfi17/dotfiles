@@ -31,17 +31,26 @@ paq {'kyazdani42/nvim-web-devicons'}
 paq {'sainnhe/gruvbox-material'}
 paq {'lukas-reineke/indent-blankline.nvim', branch='lua'}
 paq {'lewis6991/gitsigns.nvim'}
+paq {'folke/zen-mode.nvim'}
+paq {'romgrk/barbar.nvim'}
 
 -- Formatting
 paq {'godlygeek/tabular'}
 paq {'AckslD/nvim-revJ.lua'}
 paq {'tpope/vim-surround'}
+paq {'b3nj5m1n/kommentary'}
 
 -- Language Specific
 paq {'lervag/vimtex'}
 
 -- Other
 paq {'sindrets/diffview.nvim'}
+paq {'folke/which-key.nvim'}
+paq {'folke/trouble.nvim'}
+paq {'folke/todo-comments.nvim'}
+-- TODO: Look into lsp-saga as an alternative
+paq {'ray-x/lsp_signature.nvim'}
+paq {'kyazdani42/nvim-tree.lua'}
 
 -- Enable colorscheme
 vim.g.gruvbox_material_background = 'hard'
@@ -57,6 +66,17 @@ require('myconf.plugins.gitsigns')
 require('myconf.plugins.compe')
 require('myconf.plugins.diffview')
 require('revj').setup{}
+require('kommentary.config').use_extended_mappings()
+require('myconf.plugins.which-key')
+require('myconf.plugins.trouble')
+require('todo-comments').setup{}
+require('lsp_signature').on_attach()
+
+-- Configure barbar
+vim.g.bufferline = {animation = false}
+
+-- Configure NvimTree
+vim.g.nvim_tree_root_folder_modifier = ':~:t'
 
 -- Configure vimtex to use the right viewer
 vim.g.vimtex_view_method = 'zathura'
