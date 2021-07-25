@@ -61,10 +61,11 @@ wk.register({
     t = {
         name = "Trouble",
         x = { "<cmd>TroubleToggle<cr>", "Trouble", silent = true, noremap = true },
-        w = { "<cmd>TroubleToggle lsp_workspace_diagnostics<cr>", "LSP Workspace Diagnostics", silent = true, noremap = true },
-        d = { "<cmd>TroubleToggle lsp_document_diagnostics<cr>", "LSP Document Diagnostics", silent = true, noremap = true },
-        l = { "<cmd>TroubleToggle loclist<cr>", "Location List", silent = true, noremap = true },
-        q = { "<cmd>TroubleToggle quickfix<cr>", "Quickfix List", silent = true, noremap = true },
+        w = { "<cmd>Trouble lsp_workspace_diagnostics<cr>", "LSP Workspace Diagnostics", silent = true, noremap = true },
+        d = { "<cmd>Trouble lsp_document_diagnostics<cr>", "LSP Document Diagnostics", silent = true, noremap = true },
+        l = { "<cmd>Trouble loclist<cr>", "Location List", silent = true, noremap = true },
+        q = { "<cmd>Trouble quickfix<cr>", "Quickfix List", silent = true, noremap = true },
+        t = { "<cmd>TodoTrouble<cr>", "Todo List", silent = true, noremap = true },
     },
     x = { "<cmd>BufferClose<cr>", "Close Buffer", silent = true, noremap = true },
 }, { prefix = "<leader>" })
@@ -77,3 +78,8 @@ wk.register({
         i = { "Motion Increase" },
     },
 }, { prefix = "<leader>", mode = "v" })
+
+-- Normal-mode Keymaps
+wk.register({
+    f = { "<cmd>lua require('hop').hint_char1()<cr>", "Hop Word", silent = true, noremap = true },
+}, {})

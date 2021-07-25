@@ -16,6 +16,7 @@ vim.opt.hidden = true
 vim.opt.scrolloff = 10
 vim.opt.wildmode = "longest:full,full"
 vim.opt.history = 1000
+vim.opt.foldlevel = 99
 vim.opt.foldlevelstart = 99
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -39,5 +40,9 @@ vim.opt.undofile = true
 vim.opt.modeline = true
 vim.opt.termguicolors = true
 
+-- Workaround for barbar.nvim
+vim.opt.showtabline = 2
+
 
 vim.g.python_recommended_style = 0
+vim.g.rust_recommended_style = 0
