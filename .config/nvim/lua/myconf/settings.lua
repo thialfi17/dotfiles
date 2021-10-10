@@ -29,8 +29,9 @@ vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.cursorcolumn = true
 vim.opt.wrap = true
-vim.opt.foldmethod = 'expr'
+vim.opt.foldmethod = 'indent'
 vim.opt.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.opt.showtabline=2
 vim.opt.foldenable = true
 vim.opt.list = true
 vim.opt.tabstop = 4
@@ -39,10 +40,6 @@ vim.opt.expandtab = true
 vim.opt.undofile = true
 vim.opt.modeline = true
 vim.opt.termguicolors = true
-
--- Workaround for barbar.nvim
-vim.opt.showtabline = 2
-
 
 vim.g.python_recommended_style = 0
 vim.g.rust_recommended_style = 0

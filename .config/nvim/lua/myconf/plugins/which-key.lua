@@ -10,6 +10,7 @@ wk.register({
 
 -- Normal-mode Keymaps with Leader
 wk.register({
+    ["zz"] = { "<cmd>ZenMode<cr>", "Zen Mode", silent = true, noremap = true },
     c = {
         name = "Kommentary",
         d = { name = "Motion Decrease", c = "Line decrease", },
@@ -52,9 +53,9 @@ wk.register({
     ["lm"] = { "Reload Telescope" },
     n = {
         name = "NvimTree",
-        t = { "<cmd>lua require'myconf.plugins.tree'.toggle()<cr>", "Toggle Tree", silent = true, noremap = true },
-        o = { "<cmd>lua require'myconf.plugins.tree'.open()<cr>", "Open Tree", silent = true, noremap = true },
-        c = { "<cmd>lua require'myconf.plugins.tree'.close()<cr>", "Close Tree", silent = true, noremap = true },
+        t = { "<cmd>lua require'myconf.plugins.nvim-tree'.toggle()<cr>", "Toggle Tree", silent = true, noremap = true },
+        o = { "<cmd>lua require'myconf.plugins.nvim-tree'.open()<cr>", "Open Tree", silent = true, noremap = true },
+        c = { "<cmd>lua require'myconf.plugins.nvim-tree'.close()<cr>", "Close Tree", silent = true, noremap = true },
         r = { "<cmd>NvimTreeRefresh<cr>", "Refresh Tree", silent = true, noremap = true },
         f = { "<cmd>NvimTreeFindFile<cr>", "Find File", silent = true, noremap = true },
     },

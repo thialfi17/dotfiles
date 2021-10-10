@@ -74,6 +74,7 @@ require('myconf.plugins.kommentary')
 require('myconf.plugins.which-key')
 require('myconf.plugins.trouble')
 require('myconf.plugins.zenmode')
+require('myconf.plugins.nvim-tree')
 require('lsp_signature').on_attach()
 require('hop').setup()
 
@@ -82,8 +83,6 @@ vim.g.bufferline = {animation = false}
 
 -- Configure NvimTree
 vim.g.nvim_tree_root_folder_modifier = ':~:t'
-vim.g.nvim_tree_disable_netrw = 0
-vim.g.nvim_tree_hijack_netrw = 0
 vim.g.nvim_tree_window_picker_exclude = { filetype = { "Trouble", }, }
 
 -- Configure vimtex to use the right viewer

@@ -1,10 +1,10 @@
 local cb = require'diffview.config'.diffview_callback
 
 require'diffview'.setup {
+  use_icons = true,         -- Requires nvim-web-devicons
   diff_binaries = false,    -- Show diffs for binaries
   file_panel = {
     width = 35,
-    use_icons = true        -- Requires nvim-web-devicons
   },
   key_bindings = {
     -- The `view` bindings are active in the diff buffers, only when the current
