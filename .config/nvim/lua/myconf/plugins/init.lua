@@ -1,58 +1,95 @@
--- Add command to install Paq (https://oroques.dev/notes/neovim-init/)
-vim.cmd('command! InstallPaq !git clone https://github.com/savq/paq-nvim.git "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/pack/paqs/opt/paq-nvim')
+-- Automatically add Packer to Neovim
+local fn = vim.fn
+local install_path = fn.stdpath('data')..'/site/pack/packer/start/packer.nvim'
+if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({'git', 'clone', '--depth', '1', 'https://github.com/wbthomason/packer.nvim', install_path})
+end
 
--- Load Paq into Neovim
-vim.cmd('packadd paq-nvim')
-
-require "paq" {
-    -- Paq manages itself
-    {'savq/paq-nvim', opt=true};
+require('packer').startup(function(use)
+    -- Packer manages itself
+    use 'wbthomason/packer.nvim'
 
     -- Syntax plugins
-    {'nvim-treesitter/nvim-treesitter'};
-    {'nvim-treesitter/playground'};
-    {'nvim-treesitter/nvim-treesitter-refactor'};
-    {'sgur/vim-textobj-parameter'};
-    {'kana/vim-textobj-user'};
-    {'neovim/nvim-lspconfig'};
+    use { 'nvim-treesitter/nvim-treesitter', config = function() require('myconf.plugins.treesitter') end, }
+    use 'nvim-treesitter/playground'
+    use 'nvim-treesitter/nvim-treesitter-refactor'
+    use 'sgur/vim-textobj-parameter'
+    use 'kana/vim-textobj-user'
+    use { 'neovim/nvim-lspconfig', config = function() require('myconf.plugins.lsp-config') end, }
 
     -- Various libraries/common functions
-    {'nvim-lua/popup.nvim'};
-    {'nvim-lua/plenary.nvim'};
+    use 'nvim-lua/popup.nvim'
+    use 'nvim-lua/plenary.nvim'
 
     -- Autocomplete
-    {'hrsh7th/nvim-compe'};
+    use {
+        'hrsh7th/nvim-cmp',
+        requires = {
+            'hrsh7th/cmp-nvim-lsp',
+            'hrsh7th/cmp-buffer',
+            'hrsh7th/cmp-path',
+            'onsails/lspkind-nvim',
+            'saadparwaiz1/cmp_luasnip',
+        }
+    }
+    use {
+        'L3MON4D3/LuaSnip',
+        config = function()
+            vim.cmd [[
+                imap <silent><expr> <c-j> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<c-k>'
+                inoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<CR>
+                imap <silent><expr> <C-l> luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-l>'
+                snoremap <silent> <c-j> <cmd>lua require('luasnip').jump(1)<CR>
+                snoremap <silent> <c-k> <cmd>lua require('luasnip').jump(-1)<CR>
+            ]]
+        end,
+    }
 
     -- Search
-    {'nvim-telescope/telescope.nvim'};
+    use { 'nvim-telescope/telescope.nvim', config = function() require('myconf.plugins.telescope') end, }
 
     -- Appearance
-    {'kyazdani42/nvim-web-devicons'};
-    {'sainnhe/gruvbox-material'};
-    {'lukas-reineke/indent-blankline.nvim'};
-    {'lewis6991/gitsigns.nvim'};
-    {'folke/zen-mode.nvim'};
-    {'romgrk/barbar.nvim'};
+    use 'kyazdani42/nvim-web-devicons'
+    use 'sainnhe/gruvbox-material'
+    use 'lukas-reineke/indent-blankline.nvim'
+    use { 'lewis6991/gitsigns.nvim', config = function() require('myconf.plugins.gitsigns') end, }
+    use {
+        'folke/zen-mode.nvim',
+        opt = true,
+        cmd = {'ZenMode'},
+        config = function() require('myconf.plugins.zenmode') end,
+    }
+    use 'romgrk/barbar.nvim'
 
     -- Formatting
-    {'godlygeek/tabular'};
-    {'AckslD/nvim-revJ.lua'};
-    {'tpope/vim-surround'};
-    {'b3nj5m1n/kommentary'};
+    use 'godlygeek/tabular'
+    use { 'AckslD/nvim-revJ.lua', config = function() require('revj').setup() end, }
+    use 'tpope/vim-surround'
+    use { 'b3nj5m1n/kommentary', config = function() require('myconf.plugins.kommentary') end, }
 
     -- Language Specific
-    {'lervag/vimtex'};
+    use 'lervag/vimtex'
 
     -- Other
-    {'sindrets/diffview.nvim'};
-    {'folke/which-key.nvim'};
-    {'folke/trouble.nvim'};
-    {'folke/todo-comments.nvim'};
+    use {
+        'sindrets/diffview.nvim',
+        opt = true,
+        cmd = {'DiffviewOpen', 'DiffviewFileHistory'},
+        config = function() require('myconf.plugins.diffview') end,
+    }
+    use { 'folke/trouble.nvim', config = function() require('myconf.plugins.trouble') end, }
+    use { 'folke/todo-comments.nvim', config = function() require('todo-comments').setup{} end, }
     -- TODO: Look into lsp-saga as an alternative
-    {'ray-x/lsp_signature.nvim'};
-    {'kyazdani42/nvim-tree.lua'};
-    {'phaazon/hop.nvim'};
-}
+    use { 'ray-x/lsp_signature.nvim', config = function() require('lsp_signature').on_attach() end, }
+    use { 'kyazdani42/nvim-tree.lua', config = function() require('myconf.plugins.nvim-tree') end, }
+    use { 'phaazon/hop.nvim', config = function() require('hop').setup() end, }
+    use { 'folke/which-key.nvim', config = function() require('myconf.plugins.which-key') end, }
+
+    -- Automatically set up configuration after cloning packer.nvim
+    if packer_bootstrap then
+        require('packer').sync()
+    end
+end)
 
 -- Enable colorscheme
 vim.g.gruvbox_material_background = 'hard'
@@ -62,21 +99,7 @@ vim.g.gruvbox_material_sign_column_background = 'none'
 vim.cmd("colorscheme gruvbox-material")
 
 -- Plugin configurations/initialisations
-require('myconf.plugins.treesitter')
-require('todo-comments').setup{}
-require('myconf.plugins.telescope')
-require('myconf.plugins.lsp-config')
-require('myconf.plugins.gitsigns')
-require('myconf.plugins.compe')
-require('myconf.plugins.diffview')
-require('revj').setup{}
-require('myconf.plugins.kommentary')
-require('myconf.plugins.which-key')
-require('myconf.plugins.trouble')
-require('myconf.plugins.zenmode')
-require('myconf.plugins.nvim-tree')
-require('lsp_signature').on_attach()
-require('hop').setup()
+require('myconf.plugins.nvim-cmp')
 
 -- Configure barbar
 vim.g.bufferline = {animation = false}
