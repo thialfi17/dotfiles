@@ -47,6 +47,7 @@ require('packer').startup(function(use)
 
     -- Search
     use { 'nvim-telescope/telescope.nvim', config = function() require('myconf.plugins.telescope') end, }
+    use { 'nvim-telescope/telescope-symbols.nvim' }
 
     -- Appearance
     use 'kyazdani42/nvim-web-devicons'
@@ -60,6 +61,7 @@ require('packer').startup(function(use)
         config = function() require('myconf.plugins.zenmode') end,
     }
     use 'romgrk/barbar.nvim'
+    use { 'norcalli/nvim-colorizer.lua', config = function() require('colorizer').setup() end, }
 
     -- Formatting
     use 'godlygeek/tabular'

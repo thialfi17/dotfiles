@@ -1,5 +1,5 @@
 local map = vim.api.nvim_set_keymap
-local actions=require('telescope.actions')
+local actions = require('telescope.actions')
 local finders = require('telescope.finders')
 local pickers = require('telescope.pickers')
 local make_entry = require('telescope.make_entry')

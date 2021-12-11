@@ -40,6 +40,8 @@ vim.opt.expandtab = true
 vim.opt.undofile = true
 vim.opt.modeline = true
 vim.opt.termguicolors = true
+vim.opt.linebreak = true
+vim.opt.breakindent = true
 
 vim.g.python_recommended_style = 0
 vim.g.rust_recommended_style = 0
