@@ -1,0 +1,46 @@
+theme = "native"
+
+
+[icons]
+name = "material-nf"
+
+[icons.overrides]
+#ram = ""
+#cpu = ""
+
+
+
+[[block]]
+block = "focused_window"
+max_width = 50
+show_marks = "visible"
+
+[[block]]
+block = "music"
+player = "spotify"
+buttons = ["play", "next"]
+on_collapsed_click = "spotify"
+
+[[block]]
+block = "battery"
+interval = 10
+format = "{percentage} {time}"
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{mem_used_percents}"
+format_swap = "{swap_used_percents}"
+
+[[block]]
+block = "cpu"
+interval = 1
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "time"
+interval = 5
+format = "%a %d/%m %R"
+
