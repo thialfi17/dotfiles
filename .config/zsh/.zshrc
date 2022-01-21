@@ -37,9 +37,9 @@ alias vim='nvim'
 ls () {
     if [ -n "$1" ]
     then
-        exa --group-directories-first ${@:1}
+        exa --icons --group-directories-first ${@:1}
     else
-        exa --group-directories-first
+        exa --icons --group-directories-first
     fi
 }
 
