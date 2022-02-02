@@ -1,4 +1,6 @@
-require('trouble').setup{}
+require('trouble').setup{
+    mode = "workspace_diagnostics",
+}
 
 local actions = require("telescope.actions")
 local trouble = require("trouble.providers.telescope")

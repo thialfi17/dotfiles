@@ -1,6 +1,6 @@
-local map = vim.api.nvim_set_keymap
+local map = vim.keymap.set
 
-map('t', '<Esc><Esc>', '<C-\\><C-n>', {})
+map('t', '<Esc><Esc>', '<C-\\><C-n>', {desc="Return to normal mode"})
 
 map('n', 'n', 'nzz', {noremap = true})
 map('n', 'N', 'Nzz', {noremap = true})

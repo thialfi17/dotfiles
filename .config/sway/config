@@ -39,7 +39,9 @@ show_marks no
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
 output eDP-1 scale 1.5
-output * bg /home/josh/pictures/wallpapers/spaceman.png fill
+output * bg /home/josh/pictures/wallpapers/desert-nights-moon-5k-8n.jpg fill
+output DP-3 position 0 0
+#output DP-1 modeline "497.25 2560 2608 2640 2720 1440 1443 1448 1525 +hsync -vsync"
 #output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 #
 # Example configuration:
@@ -56,6 +58,7 @@ exec swayidle -w \
          timeout 300 'swaylock -f -c 000000' \
          timeout 600 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
          before-sleep 'swaylock -f -c 000000'
+
 
 # This will lock your screen after 300 seconds of inactivity, then turn off
 # your displays after another 300 seconds, and turn your screens back on when
@@ -91,7 +94,7 @@ input "type:keyboard" {
     # Start a terminal
     bindsym $mod+Return exec $term
 
-    bindsym $mod+$alt+0 gaps inner 
+    bindsym $mod+$alt+0 gaps inner all toggle 5px
 
     # Play-pause
     bindsym $mod+Apostrophe exec playerctl play-pause
@@ -100,7 +103,10 @@ input "type:keyboard" {
     bindsym $mod+Grave workspace back_and_forth
 
     # Remove the borders on a window
-    bindsym $mod+z border toggle
+    bindsym $mod+x border toggle
+
+    # Toggle the status bar
+    bindsym $mod+z bar mode toggle
 
     # Kill focused window
     bindsym $mod+Shift+q kill
@@ -144,6 +150,12 @@ input "type:keyboard" {
     bindsym $mod+Shift+Down move down
     bindsym $mod+Shift+Up move up
     bindsym $mod+Shift+Right move right
+
+    # Move the focused workspace with the same, but use Control
+    bindsym $mod+Control+$left move workspace to output left
+    bindsym $mod+Control+$down move workspace to output down
+    bindsym $mod+Control+$up move workspace to output up
+    bindsym $mod+Control+$right move workspace to output right
 #
 # Workspaces:
 #
@@ -239,6 +251,19 @@ bindsym $mod+r mode "resize"
 #
 bindsym $mod+m            exec swaymsg -t get_marks | jq --raw-output ".[]" | cut -c2- | dmenu -fn $dmenu_font -p "Mark Name" | xargs -I{} swaymsg -- mark --toggle _{}
 bindsym $mod+Shift+Return exec swaymsg -t get_marks | jq --raw-output ".[]" | cut -c2- | dmenu -fn $dmenu_font -p "Mark Name" | xargs -I{} swaymsg -- swap container with mark _{}
+
+
+#
+# Media control
+#
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +2%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -2%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioPause exec playerctl play-pause
 
 #
 # Status Bar:

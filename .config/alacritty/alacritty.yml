@@ -36,7 +36,7 @@ font:
     family: Hack
     style: Italic
 
-  size: 12
+  size: 13
 
   offset:
     x: 0
@@ -85,8 +85,6 @@ visual_bell:
   animation: EaseOutExpo
   duration: 0
   color: '0xffffff'
-
-background_opacity: 1.0
 
 mouse_bindings:
   - { mouse: Middle, action: PasteSelection }
