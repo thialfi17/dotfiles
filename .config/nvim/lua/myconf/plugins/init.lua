@@ -83,7 +83,6 @@ require('packer').startup(function(use)
     use { 'folke/todo-comments.nvim', config = function() require('todo-comments').setup{} end, }
     -- TODO: Look into lsp-saga as an alternative
     use { 'ray-x/lsp_signature.nvim', config = function() require('lsp_signature').on_attach() end, }
-    use { 'kyazdani42/nvim-tree.lua', config = function() require('myconf.plugins.nvim-tree') end, }
     use { 'phaazon/hop.nvim', config = function() require('hop').setup() end, }
     use { 'folke/which-key.nvim', config = function() require('myconf.plugins.which-key') end, }
 
@@ -105,10 +104,6 @@ require('myconf.plugins.nvim-cmp')
 
 -- Configure barbar
 vim.g.bufferline = {animation = false}
-
--- Configure NvimTree
-vim.g.nvim_tree_root_folder_modifier = ':~:t'
-vim.g.nvim_tree_window_picker_exclude = { filetype = { "Trouble", }, }
 
 -- Configure vimtex to use the right viewer
 vim.g.vimtex_view_method = 'zathura'
