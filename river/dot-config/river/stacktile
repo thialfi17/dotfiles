@@ -1,0 +1,52 @@
+#!/bin/sh
+
+riverctl spawn stacktile
+riverctl default-layout stacktile
+
+riverctl map layout-editor None J send-layout-cmd stacktile "primary_count -1"
+riverctl map layout-editor None K send-layout-cmd stacktile "primary_count +1"
+
+riverctl map layout-editor None H send-layout-cmd stacktile "primary_ratio -0.1"
+riverctl map layout-editor None L send-layout-cmd stacktile "primary_ratio +0.1"
+
+riverctl map layout-editor None C send-layout-cmd stacktile "primary_sublayout columns"
+riverctl map layout-editor None R send-layout-cmd stacktile "primary_sublayout rows"
+riverctl map layout-editor None S send-layout-cmd stacktile "primary_sublayout stack"
+riverctl map layout-editor None G send-layout-cmd stacktile "primary_sublayout grid"
+riverctl map layout-editor None M send-layout-cmd stacktile "primary_sublayout mgrid"
+riverctl map layout-editor None F send-layout-cmd stacktile "primary_sublayout full"
+riverctl map layout-editor None D send-layout-cmd stacktile "primary_sublayout dwindle"
+
+riverctl map layout-editor None Up    send-layout-cmd stacktile "primary_position top"
+riverctl map layout-editor None Right send-layout-cmd stacktile "primary_position right"
+riverctl map layout-editor None Down  send-layout-cmd stacktile "primary_position bottom"
+riverctl map layout-editor None Left  send-layout-cmd stacktile "primary_position left"
+
+riverctl map layout-editor None P send-layout-cmd stacktile "all_primary toggle"
+
+riverctl map layout-editor Shift J send-layout-cmd stacktile "secondary_count -1"
+riverctl map layout-editor Shift K send-layout-cmd stacktile "secondary_count +1"
+
+riverctl map layout-editor Shift H send-layout-cmd stacktile "secondary_ratio -0.1"
+riverctl map layout-editor Shift L send-layout-cmd stacktile "secondary_ratio +0.1"
+
+riverctl map layout-editor Shift C send-layout-cmd stacktile "secondary_sublayout columns"
+riverctl map layout-editor Shift R send-layout-cmd stacktile "secondary_sublayout rows"
+riverctl map layout-editor Shift S send-layout-cmd stacktile "secondary_sublayout stack"
+riverctl map layout-editor Shift G send-layout-cmd stacktile "secondary_sublayout grid"
+riverctl map layout-editor Shift M send-layout-cmd stacktile "secondary_sublayout mgrid"
+riverctl map layout-editor Shift F send-layout-cmd stacktile "secondary_sublayout full"
+riverctl map layout-editor Shift D send-layout-cmd stacktile "secondary_sublayout dwindle"
+
+riverctl map layout-editor Alt C send-layout-cmd stacktile "remainder_sublayout columns"
+riverctl map layout-editor Alt R send-layout-cmd stacktile "remainder_sublayout rows"
+riverctl map layout-editor Alt S send-layout-cmd stacktile "remainder_sublayout stack"
+riverctl map layout-editor Alt G send-layout-cmd stacktile "remainder_sublayout grid"
+riverctl map layout-editor Alt M send-layout-cmd stacktile "remainder_sublayout mgrid"
+riverctl map layout-editor Alt F send-layout-cmd stacktile "remainder_sublayout full"
+riverctl map layout-editor Alt D send-layout-cmd stacktile "remainder_sublayout dwindle"
+
+riverctl map layout-editor None Minus send-layout-cmd stacktile "all_padding -1"
+riverctl map layout-editor None Equal send-layout-cmd stacktile "all_padding +1"
+
+riverctl map layout-editor Control R send-layout-cmd stacktile "reset"

@@ -1,0 +1,345 @@
+BIND=^A:repeat
+OPTIONS=boulder:0
+OPTIONS=altmeta
+OPTIONS=msg_window:full
+OPTIONS=toptenwin
+SYMBOLS=S_golem:7
+SYMBOLS=S_ghost:8
+
+OPTIONS=color,menucolors
+OPTIONS=implicit_uncursed
+
+OPTIONS=windowtype:curses
+OPTIONS=align_message:bottom
+OPTIONS=perm_invent
+
+####################
+# AUTOPICKUP OPTIONS
+####################
+
+OPTIONS=autopickup, pickup_burden:unencumbered, pickup_types:?!=$*%"+
+OPTIONS=paranoid_confirmation:pR
+
+# Always pick up
+AUTOPICKUP_EXCEPTION="<magic lamp"
+AUTOPICKUP_EXCEPTION="<wand of wishing"
+AUTOPICKUP_EXCEPTION="<wand of death"
+AUTOPICKUP_EXCEPTION="<wand of polymorph"
+
+# Never pick up
+AUTOPICKUP_EXCEPTION=">scroll of scare monster"
+AUTOPICKUP_EXCEPTION=">pickaxe"
+
+AUTOPICKUP_EXCEPTION=">corpse"
+
+AUTOPICKUP_EXCEPTION=">rock"
+AUTOPICKUP_EXCEPTION=">gray stone"
+AUTOPICKUP_EXCEPTION=">load stone"
+AUTOPICKUP_EXCEPTION=">loadstone"
+AUTOPICKUP_EXCEPTION=">flint stone"
+AUTOPICKUP_EXCEPTION=">worthless piece of"
+
+####################
+# 
+####################
+
+OPTIONS=disclose:yi na nv ng nc no
+
+OPTIONS=hilite_pet
+
+OPTIONS=hitpointbar
+OPTIONS=showexp, showscore, time
+OPTIONS=lit_corridor
+OPTIONS=number_pad:0
+OPTIONS=pettype:none
+OPTIONS=pile_limit:2
+
+#
+# *** Palette ***
+#
+# With the palette option you can change the colors used
+# by NetHack.
+#
+# There are 16 colors in total. Each color is specified
+# with three hexadecimal digits. One digit each for the
+# red, green, and blue component. Internally the digits
+# are duplicated to form a 24bpp color. So F90 expands
+# to FF9900.
+#
+# The colors are specified in a fixed order separated
+# with '/'.
+# The order is as follows:
+#
+# Palette index
+#   0 - Black
+#   1 - Red
+#   2 - Green
+#   3 - Brown
+#   4 - Blue
+#   5 - Magenta
+#   6 - Cyan
+#   7 - Gray
+#   8 - No color
+#   9 - Orange
+#   A - Bright Green
+#   B - Yellow
+#   C - Bright Blue
+#   D - Bright Magenta
+#   E - Bright Cyan
+#   F - White
+#
+# Palette index: 0   1   2   3   4   5   6   7   8   9   A   B   C   D   E   F
+#                |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+#OPTIONS=palette:555/F00/080/641/00F/F0F/0FF/888/FFF/F90/0F0/FF0/08F/F7F/7FF/FFF
+
+# *** Dumplog ***
+#
+# A dump log is a log that is written when the game is
+# over. It contains a view of the map and a record of
+# the player's belonging, attributes, etc.
+#
+# The logs are written to the "Documents" folder
+# normally located at /sdcard/Documents/
+#OPTIONS=dumplog
+
+# Colorize individual rows on a menu based on what
+# regular expressions match its text
+# http://nethackwiki.com/wiki/Menucolors
+
+#GENERAL
+
+MENUCOLOR=" blessed "=cyan&bold
+MENUCOLOR=" holy "=cyan&bold
+MENUCOLOR=" uncursed "=green
+MENUCOLOR=" cursed "=red&bold
+MENUCOLOR=" unholy "=red&bold
+MENUCOLOR="loadstone|wand (of|called) cancellation"=white&underline
+MENUCOLOR="Amulet of Yendor named"=magenta&bold
+MENUCOLOR="gold piece"=yellow&bold
+MENUCOLOR="You hear"=orange&bold
+MENUCOLOR="You feel"=orange&bold
+
+#MAP
+
+MENUCOLOR="The Dungeons of Doom"=cyan&inverse
+MENUCOLOR="The Gnomish Mines:"=brown&inverse
+MENUCOLOR="to The Gnomish Mines"=brown
+MENUCOLOR="Delphi"=cyan
+MENUCOLOR="Sokoban:"=blue&inverse
+MENUCOLOR="up to Sokoban"=blue
+MENUCOLOR="Solved"=blue
+MENUCOLOR="Summoned"=magenta
+MENUCOLOR="a temple"=brown
+MENUCOLOR="Fort Ludios"=green
+MENUCOLOR="Fort Ludios:"=green&inverse
+MENUCOLOR="The Quest"=magenta
+MENUCOLOR="The Quest:"=magenta&inverse
+MENUCOLOR="castle."=red
+MENUCOLOR="Gehennom"=red
+MENUCOLOR="Gehennom:"=red&inverse
+MENUCOLOR="of the Dead"=red
+MENUCOLOR="Vlad's Tower"=red
+MENUCOLOR="Vlad's Tower:"=red&inverse
+
+#INVENTORY
+MENUCOLOR="Coins"=gray&inverse
+MENUCOLOR="Weapons"=gray&inverse
+MENUCOLOR="Armor"=gray&inverse
+MENUCOLOR="Wands"=gray&inverse
+MENUCOLOR="Scrolls"=gray&inverse
+MENUCOLOR="Potions"=gray&inverse
+MENUCOLOR="Tools"=gray&inverse
+MENUCOLOR="Rings"=gray&inverse
+MENUCOLOR="Comestibles"=gray&inverse
+MENUCOLOR="Amulets"=gray&inverse
+MENUCOLOR="Spellbooks"=gray&inverse
+MENUCOLOR="All types"=gray&inverse
+MENUCOLOR="Gems/Stones"=gray&inverse
+
+#EQUIPEMENT
+
+MENUCOLOR="(in quiver)"=gray&underline
+MENUCOLOR="cursed.*\(in quiver\)"=red&underline
+MENUCOLOR="uncursed.*\(in quiver\)"=green&underline
+MENUCOLOR="blessed.*\(in quiver\)"=cyan&underline
+
+MENUCOLOR="(at the ready)"=gray&underline
+MENUCOLOR="cursed.*\(at the ready\)"=red&underline
+MENUCOLOR="uncursed.*\(at the ready\)"=green&underline
+MENUCOLOR="blessed.*\(at the ready\)"=cyan&underline
+
+MENUCOLOR="(alternate weapon; not wielded)"=gray&underline
+MENUCOLOR="cursed.*\(alternate weapon; not wielded\)"=red&underline
+MENUCOLOR="uncursed.*\(alternate weapon; not wielded\)"=green&underline
+MENUCOLOR="blessed.*\(alternate weapon; not wielded\)"=cyan&underline
+
+MENUCOLOR="(weapon in hand)"=gray&inverse
+MENUCOLOR="cursed.*\(weapon in hand\)"=red&inverse
+MENUCOLOR="uncursed.*\(weapon in hand\)"=green&inverse
+MENUCOLOR="blessed.*\(weapon in hand\)"=cyan&inverse
+
+MENUCOLOR="(being worn)"=gray&inverse
+MENUCOLOR="cursed.*\(being worn\)"=red&inverse
+MENUCOLOR="uncursed.*\(being worn\)"=green&inverse
+MENUCOLOR="blessed.*\(being worn\)"=cyan&inverse
+
+MENUCOLOR="(wielded in other hand)"=gray&inverse
+MENUCOLOR="cursed.*\(wielded in other hand\)"=red&inverse
+MENUCOLOR="uncursed.*\(wielded in other hand\)"=green&inverse
+MENUCOLOR="blessed.*\(wielded in other hand\)"=cyan&inverse
+
+# unidentified magic armor
+
+
+MENUCOLOR="piece of cloth|opera cloak|ornamental cope|tattered cape.*\(being worn\)"=magenta&inverse
+MENUCOLOR="plumed helmet|etched helmet|crested helmet|visored helmet.*\(being worn\)"=magenta&inverse
+MENUCOLOR="(old|padded|riding|fencing) gloves.*\(being worn\)"=magenta&inverse
+MENUCOLOR="(mud|buckled|riding|snow|hiking|combat|jungle) boots.*\(being worn\)"=magenta&inverse
+
+MENUCOLOR="piece of cloth|opera cloak|ornamental cope|tattered cape"=magenta
+MENUCOLOR="plumed helmet|etched helmet|crested helmet|visored helmet"=magenta
+MENUCOLOR="(old|padded|riding|fencing) gloves"=magenta
+MENUCOLOR="(mud|buckled|riding|snow|hiking|combat|jungle) boots"=magenta
+
+
+
+MENUCOLOR="(on right hand)"=gray&inverse
+MENUCOLOR="cursed.*\(on right hand\)"=red&inverse
+MENUCOLOR="uncursed.*\(on right hand\)"=green&inverse
+MENUCOLOR="blessed.*\(on right hand\)"=cyan&inverse
+
+MENUCOLOR="(on left hand)"=gray&inverse
+MENUCOLOR="cursed.*\(on left hand\)"=red&inverse
+MENUCOLOR="uncursed.*\(on left hand\)"=green&inverse
+MENUCOLOR="blessed.*\(on left hand\)"=cyan&inverse
+
+MENUCOLOR=". -.* \[(Unskilled|Basic|Skilled|Expert|Master)"=white
+MENUCOLOR="[a-zA-Z] - [a-zA-Z ]+[ ]+[0-9]+\*[ ]+[a-z]+[ ]+[0-9]+%"=magenta
+
+# *** Status hilites ***
+#
+
+## Keep changes for x number of turns
+OPTIONS=statushilites:10
+
+## Misc
+OPTIONS=hilite_status:gold/always/yellow
+OPTIONS=hilite_status:characteristics/up/green/down/red
+OPTIONS=hilite_status:experience-level/up/green/down/red
+
+## HP
+OPTIONS=hilite_status:hitpoints/100%/green/<100%/green/<70%/yellow
+OPTIONS=hilite_status:hitpoints/<50%/orange/<30%/red&bold
+OPTIONS=hilite_status:hitpoints/<15%/red&inverse
+
+## Power
+OPTIONS=hilite_status:power/100%/green/<100%/green/<70%/yellow
+OPTIONS=hilite_status:power/<50%/orange/<30%/red&bold
+
+## Conditions
+OPTIONS=hilite_status:condition/movement/green
+OPTIONS=hilite_status:condition/minor_troubles/orange
+OPTIONS=hilite_status:condition/major_troubles/red&inverse
+OPTIONS=hilite_status:condition/blind/red/stun/red
+
+## Hunger
+OPTIONS=hilite_status:hunger/satiated/yellow/hungry/orange
+OPTIONS=hilite_status:hunger/weak/red&bold/fainting/red&inverse
+OPTIONS=hilite_status:hunger/fainted/red&inverse
+
+## Encumbrance
+OPTIONS=hilite_status:carrying-capacity/burdened/yellow/stressed/orange
+OPTIONS=hilite_status:carrying-capacity/strained/red&bold
+OPTIONS=hilite_status:carrying-capacity/overtaxed/red&inverse
+OPTIONS=hilite_status:carrying-capacity/overloaded/red&inverse
+
+
+
+
+
+# emergencies
+MSGTYPE=stop "The (couatl.*eel|kraken) swings itself around you!"
+MSGTYPE=stop "The python grabs you!"
+MSGTYPE=stop "You don't feel very well"
+MSGTYPE=stop "You are turning a little green"
+MSGTYPE=stop "Your limbs are getting oozy"
+MSGTYPE=stop "Your skin begins to peel away"
+MSGTYPE=stop "You are turning into a green slime"
+MSGTYPE=stop "You are slowing down"
+MSGTYPE=stop "Your limbs are stiffening"
+MSGTYPE=stop "It constricts your throat!"
+MSGTYPE=stop "You find it hard to breathe"
+MSGTYPE=stop "You're gasping for air"
+MSGTYPE=stop "Your blood is having trouble reaching your brain"
+MSGTYPE=stop "You can no longer breathe"
+MSGTYPE=stop "You're turning blue"
+MSGTYPE=stop "Your consciousness is fading"
+MSGTYPE=stop "You feel deathly sick"
+MSGTYPE=stop "You feel much worse"
+MSGTYPE=stop "You feel even worse"
+
+# vibrating square
+MSGTYPE=stop "You feel a strange vibration beneath "
+MSGTYPE=stop "You feel a strange vibration under your "
+
+# #enhance
+MSGTYPE=stop "You feel more confident "
+
+# status effects
+MSGTYPE=stop "You feel hungry"
+MSGTYPE=stop "You are beginning to feel hungry"
+MSGTYPE=stop "You are getting the munchies"
+MSGTYPE=stop "You feel weak now"
+MSGTYPE=stop "You still have the munchies"
+MSGTYPE=stop "You feel weak"
+MSGTYPE=stop "You are beginning to feel weak"
+MSGTYPE=stop "The munchies are interfering with your motor capabilities"
+MSGTYPE=stop " needs food, badly!"
+MSGTYPE=stop "You only feel hungry now"
+MSGTYPE=stop "You now have a lesser case of the munchies"
+MSGTYPE=stop "You faint from lack of food"
+MSGTYPE=stop "You regain consciousness"
+MSGTYPE=stop "You die from starvation"
+MSGTYPE=stop "You die from hunger and exhaustion"
+MSGTYPE=stop "You feel deathly sick"
+MSGTYPE=stop "You feel even worse"
+MSGTYPE=stop "You feel much worse"
+MSGTYPE=stop "You die from your illness"
+
+#  (potential) inventory cursing
+MSGTYPE=stop "You feel a malignant aura surround the magic-absorbing blade"
+MSGTYPE=stop "You feel a malignant aura surround you"
+
+#  near-death
+MSGTYPE=stop "You hear the howling of the CwnAnnwn..."
+MSGTYPE=stop ", your life force is running out."
+MSGTYPE=stop ", all your powers will be lost..."
+MSGTYPE=stop "You hear the wailing of the Banshee..."
+MSGTYPE=stop " is about to die."
+
+# noise
+MSGTYPE=hide "^With great effort you move the boulder"
+MSGTYPE=hide "^Your armor is rather cumbersome..."               #  monk wearing body armor
+MSGTYPE=hide "^You displaced "
+
+
+
+
+
+#######################
+# SPELL FAILURE RATES #
+#######################
+MENUCOLOR=" 0%"=white
+MENUCOLOR=" [1-9]%"=cyan
+MENUCOLOR=" [12][0-9]%"=cyan
+MENUCOLOR=" [3-6][0-9]%"=yellow
+MENUCOLOR=" 7[0-5]%"=yellow
+MENUCOLOR=" 7[6-9]%"=orange
+MENUCOLOR=" 8[0-9]%"=orange
+MENUCOLOR=" 9[0-9]%"=red
+MENUCOLOR=" 100%"=red
+
+###################
+# FORGOTTEN SPELL # thanks, Stevie, rsarson
+###################
+MENUCOLOR="[a-zA-Z ]+ [0-9]\*   [a-z]+ +[0-9]+%"=magenta

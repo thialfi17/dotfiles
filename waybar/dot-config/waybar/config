@@ -1,0 +1,49 @@
+{
+    "layer": "bottom",
+    "position": "top",
+    "modules-left": ["river/tags", "river/layout", "river/mode"],
+    "modules-center": ["river/window"],
+    "modules-right": ["custom/spotify", "tray", "pulseaudio", "clock"],
+    "river/tags": {
+        "tag-labels": ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    },
+    "river/window": {
+        "max-length": 50
+    },
+    "battery": {
+        "format": "{capacity}% {icon}",
+        "format-icons": ["", "", "", "", ""]
+    },
+    "custom/spotify": {
+        "exec": "/usr/bin/python3 /home/josh/.config/waybar/mediaplayer.py",
+        "format": "{}",
+        "return-type": "json",
+        "on-click": "playerctl play-pause",
+        "on-scroll-up": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    },
+    "tray": {
+        "spacing": 10
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "scroll-step": 1,
+        "on-click": "pavucontrol",
+        "on-click-right": "pamixer -t"
+    },
+    "clock": {
+        "format": "{:%a %d %b %H:%M}",
+        "format-alt": "{:%H:%M}"
+    }
+}

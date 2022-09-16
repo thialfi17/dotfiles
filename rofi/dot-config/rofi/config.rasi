@@ -1,0 +1,12 @@
+configuration {
+	font: "Hack Nerd Font Mono 12";
+	modi: "run,ssh,drun";
+	matching: "normal";
+	show-icons: true;
+	display-run: "run: ";
+	display-drun: "drun: ";
+	display-ssh: "ssh: ";
+	display-window: "window: ";
+}
+//@theme "sidebar"
+@theme "/usr/share/rofi/themes/gruvbox-dark-hard.rasi"

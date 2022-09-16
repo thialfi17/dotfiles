@@ -1,0 +1,50 @@
+#!/bin/sh
+
+riverctl spawn river-luatile
+riverctl default-layout luatile
+
+riverctl map layout-editor None F send-layout-cmd luatile 'set("layout", "monocle")'
+riverctl map layout-editor None G send-layout-cmd luatile 'set("layout", "grid")'
+riverctl map layout-editor None M send-layout-cmd luatile 'set("layout", "main_with_stack")'
+riverctl map layout-editor None C send-layout-cmd luatile 'set("layout", "centred")'
+riverctl map layout-editor None S send-layout-cmd luatile 'set("layout", "stack")'
+
+riverctl map layout-editor Shift F send-layout-cmd luatile 'set("secondary_sublayout", "fill")'
+riverctl map layout-editor Shift G send-layout-cmd luatile 'set("secondary_sublayout", "grid")'
+riverctl map layout-editor Shift R send-layout-cmd luatile 'set("secondary_sublayout", "rows")'
+riverctl map layout-editor Shift C send-layout-cmd luatile 'set("secondary_sublayout", "cols")'
+riverctl map layout-editor Shift S send-layout-cmd luatile 'set("secondary_sublayout", "stack")'
+
+riverctl map layout-editor Alt F send-layout-cmd luatile 'set("tertiary_sublayout", "fill")'
+riverctl map layout-editor Alt G send-layout-cmd luatile 'set("tertiary_sublayout", "grid")'
+riverctl map layout-editor Alt R send-layout-cmd luatile 'set("tertiary_sublayout", "rows")'
+riverctl map layout-editor Alt C send-layout-cmd luatile 'set("tertiary_sublayout", "cols")'
+riverctl map layout-editor Alt S send-layout-cmd luatile 'set("tertiary_sublayout", "stack")'
+
+riverctl map layout-editor None H send-layout-cmd luatile 'inc("main_ratio", -0.1)'
+riverctl map layout-editor None L send-layout-cmd luatile 'inc("main_ratio", 0.1)'
+
+riverctl map layout-editor None J send-layout-cmd luatile 'inc("main_count", -1)'
+riverctl map layout-editor None K send-layout-cmd luatile 'inc("main_count", 1)'
+
+riverctl map layout-editor Shift H send-layout-cmd luatile 'inc("secondary_ratio", -0.1)'
+riverctl map layout-editor Shift L send-layout-cmd luatile 'inc("secondary_ratio", 0.1)'
+
+riverctl map layout-editor Shift J send-layout-cmd luatile 'inc("secondary_count", -1)'
+riverctl map layout-editor Shift K send-layout-cmd luatile 'inc("secondary_count", 1)'
+
+riverctl map -repeat layout-editor None Equal send-layout-cmd luatile 'inc("gaps", 1)'
+riverctl map -repeat layout-editor None Minus send-layout-cmd luatile 'inc("gaps", -1)'
+
+riverctl map -repeat layout-editor None Grave send-layout-cmd luatile 'set("smart_gaps", not get("smart_gaps"))'
+
+riverctl map layout-editor None R send-layout-cmd luatile 'reset_config()'
+
+riverctl declare-mode offset
+riverctl map layout-editor None O enter-mode offset
+
+riverctl map -repeat offset None J send-layout-cmd luatile 'inc("offset_top", 1)'
+riverctl map -repeat offset Shift J send-layout-cmd luatile 'inc("offset_top", -1)'
+
+riverctl map offset None E enter-mode layout-editor
+riverctl map offset None Escape enter-mode normal
