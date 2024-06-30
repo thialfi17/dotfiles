@@ -46,5 +46,14 @@ riverctl map layout-editor None O enter-mode offset
 riverctl map -repeat offset None J send-layout-cmd luatile 'inc("offset_top", 1)'
 riverctl map -repeat offset Shift J send-layout-cmd luatile 'inc("offset_top", -1)'
 
+riverctl map -repeat offset None K send-layout-cmd luatile 'inc("offset_bottom", 1)'
+riverctl map -repeat offset Shift K send-layout-cmd luatile 'inc("offset_bottom", -1)'
+
+riverctl map -repeat offset None H send-layout-cmd luatile 'inc("offset_right", 1)'
+riverctl map -repeat offset Shift H send-layout-cmd luatile 'inc("offset_right", -1)'
+
+riverctl map -repeat offset None L send-layout-cmd luatile 'inc("offset_left", 1)'
+riverctl map -repeat offset Shift L send-layout-cmd luatile 'inc("offset_left", -1)'
+
 riverctl map offset None E enter-mode layout-editor
 riverctl map offset None Escape enter-mode normal
