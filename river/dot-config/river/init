@@ -46,6 +46,7 @@ fi
 
 riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
 riverctl spawn "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+riverctl spawn "systemctl --user start plasma-polkit-agent"
 riverctl spawn waybar
 riverctl spawn kanshi
 #riverctl spawn "rivertile -view-padding 6 -outer-padding 6"
