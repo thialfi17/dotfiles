@@ -1,7 +1,19 @@
 #!/bin/sh
 
-# Super+Shift+Return to start an instance of foot (https://codeberg.org/dnkl/foot)
-riverctl map normal Super Return spawn alacritty
+# Super+Shift+Return to start terminal
+#
+# Torn between alacritty and foot. Would like it if alacritty gave the option
+# to support ligatures or font features but it doesn't look like that's ever
+# going to happen.
+#
+# Foot at least supports the font features but doesn't support ligatures.
+# Doesn't have universal support (or at least near-univeral) for terminfo like
+# alacritty does though.
+#
+# Wezterm appears to support ligatures and is GPU accelerated and pretty
+# configurable. So far so good.
+riverctl map normal Super Return spawn wezterm
+
 #riverctl map normal Super D spawn bemenu-run
 riverctl map normal Super D spawn "rofi -show drun -show-icons"
 riverctl map normal Super+Shift D spawn "rofi -show run"
