@@ -15,9 +15,11 @@
 riverctl map normal Super Return spawn wezterm
 
 #riverctl map normal Super D spawn bemenu-run
+# Currently using the lbonn wayland fork of rofi
 riverctl map normal Super D spawn "rofi -show drun -show-icons"
 riverctl map normal Super+Shift D spawn "rofi -show run"
-riverctl map normal Super+Ctrl D spawn "dmenu_path | dmenu -fn 'Hack Nerd Font:size=12' | xargs -I PROG riverctl spawn 'PROG'"
+
+#riverctl map normal Super+Ctrl D spawn "dmenu_path | dmenu -fn 'Hack Nerd Font:size=12' | xargs -I PROG riverctl spawn 'PROG'"
 
 riverctl map normal Super B spawn "killall -SIGUSR1 waybar"
 
@@ -112,6 +114,9 @@ riverctl map normal Super+Shift Grave send-to-previous-tags
 all_tags=$(((1 << 9) - 1))
 riverctl map normal Super 0 set-focused-tags $all_tags
 riverctl map normal Super+Shift 0 set-view-tags $all_tags
+
+riverctl map normal Super Minus toggle-focused-tags $((1 << 10))
+riverctl map normal Super+Shift Minus set-view-tags $((1 << 10))
 
 # Super+Space to toggle float
 riverctl map normal Super Space toggle-float
