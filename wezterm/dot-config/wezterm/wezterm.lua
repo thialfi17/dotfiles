@@ -1,6 +1,8 @@
 local wezterm = require "wezterm"
 local config = wezterm.config_builder()
 
+config.key_map_preference = "Physical"
+
 --config.color_scheme = "GruvboxDark"
 config.color_scheme = "GruvboxDark"
 config.bold_brightens_ansi_colors = false
