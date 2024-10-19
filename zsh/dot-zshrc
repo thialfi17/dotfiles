@@ -33,6 +33,8 @@ export EDITOR=nvim
 export PATH=$PATH:$HOME/files/scripts
 export NETHACKOPTIONS="@$HOME/.config/nethackrc"
 export MOZ_ENABLE_WAYLAND=1
+export DIFFPROG='nvim -d'
+export CARGO_HOME="$HOME/.cache/cargo"
 
 #alias ls='ls --color=auto'
 #alias ls='lsd --group-dirs first'
@@ -40,6 +42,8 @@ alias vim='nvim'
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -I'
+
+alias rsl='riverctl send-layout-cmd luatile'
 
 ls () {
     if [ -n "$1" ]
