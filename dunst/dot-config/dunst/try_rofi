@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if command -v rofi >/dev/null ; then
+    rofi -dmenu -p "dunst"
+else
+    dmenu -p dunst:
+fi
