@@ -1,0 +1,6 @@
+[Unit]
+Description=Blueman Bluetooth Manager
+PartOf=autostart.target
+
+[Service]
+ExecStart=blueman-applet

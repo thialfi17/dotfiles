@@ -1,0 +1,6 @@
+[Unit]
+Description=Private Internet Access
+PartOf=autostart.target
+
+[Service]
+ExecStart=env XDG_SESSION_TYPE=X11 /opt/piavpn/bin/pia-client %u --quiet

@@ -1,0 +1,6 @@
+[Unit]
+Description=NetworkManager Applet
+PartOf=autostart.target
+
+[Service]
+ExecStart=nm-applet
