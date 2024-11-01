@@ -1,5 +1,5 @@
 [global]
-font = Jetbrains Nerd Mono
+font = "Jetbrains Mono Nerd Font 13"
 
 # Show above fullscreen apps
 layer = overlay
