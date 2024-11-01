@@ -12,7 +12,8 @@
 #
 # Wezterm appears to support ligatures and is GPU accelerated and pretty
 # configurable. So far so good.
-riverctl map normal Super Return spawn wezterm
+riverctl map normal Super+Alt Return spawn wezterm
+riverctl map normal Super Return spawn alacritty
 
 #riverctl map normal Super D spawn bemenu-run
 # Currently using the lbonn wayland fork of rofi
