@@ -21,6 +21,12 @@ riverctl map layout-editor Alt R send-layout-cmd luatile 'set("tertiary_sublayou
 riverctl map layout-editor Alt C send-layout-cmd luatile 'set("tertiary_sublayout", "cols")'
 riverctl map layout-editor Alt S send-layout-cmd luatile 'set("tertiary_sublayout", "stack")'
 
+riverctl map layout-editor Control F send-layout-cmd luatile 'set("main_layout", "fill")'
+riverctl map layout-editor Control G send-layout-cmd luatile 'set("main_layout", "grid")'
+riverctl map layout-editor Control R send-layout-cmd luatile 'set("main_layout", "rows")'
+riverctl map layout-editor Control C send-layout-cmd luatile 'set("main_layout", "cols")'
+riverctl map layout-editor Control S send-layout-cmd luatile 'set("main_layout", "stack")'
+
 riverctl map layout-editor None H send-layout-cmd luatile 'inc("main_ratio", -0.1)'
 riverctl map layout-editor None L send-layout-cmd luatile 'inc("main_ratio", 0.1)'
 
