@@ -2,6 +2,12 @@
 -- NOTE: vim.opt is soft deprecated and is slated to be removed at _some_ point
 -- in the future
 
+-- Set window title to Neovim title
+vim.o.title = true
+
+-- Open man pages in vertical window
+vim.g.ft_man_open_mode = "vert"
+
 vim.o.tabline = "%!v:lua.Tabline()"
 
 -- Make sure to use a dark background
@@ -53,7 +59,7 @@ vim.o.previewheight = 30
 vim.o.undofile = true
 
 -- Case-insensitive searching UNLESS \C or capital in search
-vim.o.ignorecase = true
+vim.o.ignorecase = false
 vim.o.smartcase = true
 
 -- Keep signcolumn on by default
@@ -71,7 +77,7 @@ vim.o.splitbelow = true
 vim.o.list = true
 
 -- Configure characters to display for the following items
-vim.o.listchars = "tab:——▸,trail:␣,extends:→,precedes:←,nbsp:⍽,conceal:·"
+vim.o.listchars = "tab:——▶,trail:␣,extends:→,precedes:←,nbsp:⍽,conceal:·"
 
 -- Enable menu for completing command line
 vim.o.wildmenu = true
@@ -87,6 +93,8 @@ vim.o.inccommand = "split"
 
 -- Show which line your cursor is on
 vim.o.cursorline = true
+
+vim.o.colorcolumn = "100,120"
 
 -- Scroll before the end of the screen in any direction
 vim.opt.scrolloff = 10
@@ -113,7 +121,7 @@ vim.g.maplocalleader = " "
 -- General Mappings: {{{
 
 -- Remove highlighting from search
-vim.keymap.set("n", "<leader>n", "<cmd>nohlsearch<CR>")
+vim.keymap.set("n", "<leader>n", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
 -- Terminal-mode escape
 vim.keymap.set({ "t" }, "<C-\\><C-\\>", [[<C-\><C-n>]], { desc = "Escape terminal mode" })
@@ -123,16 +131,71 @@ vim.keymap.set({ "t" }, "<Esc><Esc>", "<C-\\><C-n>", { desc = "Escape terminal m
 vim.keymap.set(
     { "n" },
     "<localleader>r<space>",
-    [[m':.s/\s\+$//<CR>`']],
-    { desc = "Remove trailing whitespace on current line" }
+    [[m':.s/\s\+$//e<CR>`']],
+    { desc = "Remove trailing whitespace on current line" , silent = true }
 )
 
 -- Add zz at the end of search movement commands to center after moving
-vim.keymap.set({ "n" }, "n", [[nzz]], {})
-vim.keymap.set({ "n" }, "N", [[Nzz]], {})
+vim.keymap.set({ "n" }, "n", [[nzz]], { silent = true })
+vim.keymap.set({ "n" }, "N", [[Nzz]], { silent = true })
 
--- Open configuration file
-vim.keymap.set({ "n", "t" }, "<F4>", "<CMD>tabe $MYVIMRC<CR>", {})
+-- One-off cmd in terminal mode {{{
+vim.keymap.set({ "t" }, "<C-w>:", function()
+    local win = vim.api.nvim_get_current_win()
+    local group = vim.api.nvim_create_augroup("term_cmd", { clear = true })
+
+    vim.api.nvim_create_autocmd(
+        "CmdLineLeave",
+        {
+            desc = "Handle leaving the cmdwin when entered via <C-w>:",
+            group = group,
+            once = true,
+            callback = function()
+                -- Default to entering insert mode because we can't detect when
+                -- we have re-entered the window we came from, but can detect
+                -- when we have entered a different window.
+                vim.cmd("startinsert")
+
+                -- Exit insert mode if we entered another window
+                vim.api.nvim_create_autocmd(
+                    "WinEnter",
+                    {
+                        desc = "Exit insert mode when command resulted in entering a different window",
+                        group = group,
+                        once = true,
+                        callback = function()
+                            if vim.api.nvim_get_current_win() ~= win then
+                                vim.cmd("stopinsert")
+                            end
+                        end,
+                    }
+                )
+
+                -- Delete the "WinEnter" autocmd if it didn't fire after
+                -- 1000ms. Timeout here should be adjusted to user preference.
+                -- My mappings to change window exit insert mode anyway so long
+                -- timeout doesn't matter to me.
+                vim.defer_fn(function()
+                    vim.api.nvim_clear_autocmds({group = group})
+                end, 1000)
+            end,
+        }
+    )
+
+    vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes("<C-\\><C-n>:", true, false, true),
+        "nt", -- Do not remap and handle as if they were typed
+        false -- Don't replace special stuff since we did that already
+    )
+end)
+-- }}}
+
+vim.keymap.set({ "n" }, "j", "gj", {})
+vim.keymap.set({ "n" }, "k", "gk", {})
+
+vim.keymap.set({ "n" }, "<Leader>cl", "<CMD>set cursorline!<CR>", { desc = "Toggle cursorline" })
+vim.keymap.set({ "n" }, "<Leader>cc", "<CMD>set cursorcolumn!<CR>", { desc = "Toggle cursorcolumn" })
+vim.keymap.set({ "n" }, "<Leader>cb", "<CMD>set cursorline! cursorcolumn!<CR>", { desc = "Toggle cursorline and cursorcolumn" })
 
 -- }}} General Mappings
 
@@ -156,6 +219,15 @@ vim.keymap.set({ "n", "t" }, "<M-0>", "<CMD>10tabnext<CR>", {})
 
 -- }}} Window/Tab Navigation
 
+-- Function Key Mappings: {{{
+
+-- TODO:
+
+-- Open configuration file
+vim.keymap.set({ "n", "t" }, "<F4>", "<CMD>tabe $MYVIMRC<CR>", {})
+
+-- }}} Function Key Mappings
+
 -- }}} Mappings
 
 -- Abbreviations: {{{
@@ -163,6 +235,9 @@ vim.keymap.set({ "n", "t" }, "<M-0>", "<CMD>10tabnext<CR>", {})
 vim.keymap.set({ "ca" }, "vfind", "vert sfind", {})
 vim.keymap.set({ "ca" }, "vterm", "vert term", {})
 vim.keymap.set({ "ca" }, "help", "vert help", {})
+
+-- Make :ln behave line :cn. Replaces :ln[oremap]
+vim.keymap.set({ "ca" }, "ln", "lnext", {})
 
 -- }}}
 
@@ -172,18 +247,49 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("config-highlight-yank", { clear = true }),
     callback = function()
-        vim.highlight.on_yank()
+        vim.hl.on_yank()
     end,
 })
 
-vim.api.nvim_create_autocmd({ "VimResized" }, {
-    desc = "Resize windows when Neovim is resized",
+vim.api.nvim_create_autocmd({ "VimResized", "WinNew" }, {
+    desc = "Resize windows",
     group = vim.api.nvim_create_augroup("config-resize-windows", { clear = true }),
     pattern = { "" },
     command = "wincmd =",
 })
 
+vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter" }, {
+    desc = "Only enter insert mode in terminal windows if the job is still running",
+    group = vim.api.nvim_create_augroup("config-term-windows", { clear = true }),
+    pattern = { "term://*" },
+    callback = function()
+        -- Returns -1 on timeout i.e. if job is still running
+        if vim.fn.jobwait({vim.o.channel}, 0)[1] == -1 then
+            vim.cmd[[ startinsert ]]
+        end
+    end,
+})
+
+-- For terminals opened with no args automatically closing, see *default-autocmds*
+vim.api.nvim_create_autocmd({ "TermClose" }, {
+    desc = "Exit insert mode when terminal job finishes. Prevents accidentally closing the window.",
+    group = vim.api.nvim_create_augroup("config-term-windows", { clear = false }),
+    pattern = { "" },
+    command = "stopinsert",
+})
+
 -- }}} Autocommands
+
+-- Commands: {{{
+
+vim.api.nvim_create_user_command("Syn", function()
+    assert(vim.fn.synstack)
+    for _, id in ipairs(vim.fn.synstack(vim.fn.line("."), vim.fn.col("."))) do
+        print(vim.fn.synIDattr(id, "name"))
+    end
+end, { desc = "Show the syntax highlighting groups under the cursor" })
+
+-- }}} Commands
 
 -- File Finding and Editing: {{{
 
@@ -484,20 +590,25 @@ require("lazy").setup({
 
             -- Document existing key chains
             require("which-key").add({
-                { "<leader>c", group = "[C]ode" },
-                { "<leader>c_", hidden = true },
-                { "<leader>d", group = "[D]ocument" },
-                { "<leader>d_", hidden = true },
-                { "<leader>r", group = "[R]ename" },
-                { "<leader>r_", hidden = true },
-                { "<leader>s", group = "[S]earch" },
-                { "<leader>s_", hidden = true },
-                { "<leader>w", group = "[W]orkspace" },
-                { "<leader>w_", hidden = true },
             })
         end,
     },
     -- }}} WhichKey
+
+    -- Neovim Lua setup: {{{
+    {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+            library = {
+                -- See the configuration section for more details
+                -- Load luvit types when the `vim.uv` word is found
+                { path = "luvit-meta/library", words = { "vim%.uv" } },
+            },
+        },
+    },
+    { "Bilal2453/luvit-meta", lazy = true }, -- `vim.uv` typings
+    -- }}}
 
     -- LSP: {{{
     { -- LSP Configuration & Plugins
@@ -519,7 +630,7 @@ require("lazy").setup({
                     -- to define small helper and utility functions so you don't have to repeat yourself
                     -- many times.
                     --
-                    -- In this case, we create a function that lets us more easily define mappings specific
+                    -- In this case, we create a func that lets us more easily define mappings specific
                     -- for LSP related items. It sets the mode, buffer and description for us each time.
                     local map = function(keys, func, desc)
                         vim.keymap.set(
@@ -668,6 +779,10 @@ require("lazy").setup({
                     },
                 },
             }
+
+            for name, config in pairs(servers) do
+                require("lspconfig")[name].setup(config)
+            end
         end,
     },
     -- }}} LSP
@@ -769,6 +884,7 @@ require("lazy").setup({
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
                     { name = "path" },
+                    { name = "lazydev", group_index = 0 },
                 },
             })
         end,
