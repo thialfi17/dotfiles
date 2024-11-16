@@ -506,6 +506,32 @@ end
 
 -- Plugins: {{{
 
+-- Builtin: {{{
+
+vim.cmd[[ packadd! cfilter ]]
+--vim.cmd[[ packadd! matchit ]]
+
+-- }}}
+
+-- Mine: {{{
+
+require("win.blocking").setup({
+    additional_mappings_to_overwrite = {
+        n = {
+            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
+        },
+        t = {
+            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
+        },
+    }
+})
+require("zenmode").setup()
+
+vim.keymap.set({"n", "t"}, "<M-z>", require("zenmode").toggle, {})
+vim.keymap.set({"n", "t"}, "<M-S-z>", function() require("zenmode").toggle({show_tabline = true, show_statusline = false}) end, {})
+
+-- }}} Mine
+
 -- Install Plugin Manager: {{{
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
