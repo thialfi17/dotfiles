@@ -919,31 +919,30 @@ require("lazy").setup({
 
     -- gruvbox (Colorscheme): {{{
     {
-        "ellisonleao/gruvbox.nvim",
-        lazy = false, -- make sure we load this during startup
-        priority = 1000, -- make sure to load this before all other plugins
-        -- After loading
+        "sainnhe/gruvbox-material",
+        lazy = false,
+        priority = 1000,
         config = function()
-            -- Load the colorscheme
-            vim.cmd.colorscheme("gruvbox")
+            vim.cmd[[
+                " TODO: Make this more generic and add to autocmd
+                let g:gruvbox_material_foreground = 'original'
+                let g:gruvbox_material_disable_italic_comment = 1
+                let g:gruvbox_material_ui_contrast = 'high'
+
+                let s:configuration = gruvbox_material#get_configuration()
+                let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
+
+                colorscheme gruvbox-material
+
+                highlight! link ModeMsg MoreMsg
+                highlight! link TSPunctBracket TSOperator
+
+                call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
+                call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
+                call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
+                call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
+            ]]
         end,
-        -- Provided to setup( .. )
-        opts = {
-            undercurl = true,
-            underline = true,
-            bold = true,
-            italic = {
-                strings = false,
-                emphasis = false,
-                comments = true,
-                operators = false,
-                folds = true,
-            },
-            strikethrough = true,
-            inverse = true,
-            contrast = "hard",
-            transparent_mode = true,
-        },
     },
     -- }}} colorscheme
 
