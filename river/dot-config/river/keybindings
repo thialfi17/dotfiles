@@ -178,9 +178,11 @@ riverctl map layout-editor None E enter-mode normal
 riverctl map layout-editor Super E enter-mode normal
 riverctl map layout-editor None Escape enter-mode normal
 
-#riverctl map normal Control+Alt Delete spawn "swaylock -c 00000000"
+riverctl map normal Super L spawn "loginctl lock-session"
+riverctl map normal Control+Alt Delete spawn "rofi -show power_menu -modi power_menu:rofi-power-menu"
 
-riverctl map normal Control Space spawn "dunstctl close"
+# TODO: change this keyboard shortcut
+#riverctl map normal Control Space spawn "dunstctl close"
 riverctl map normal Control+Shift Space spawn "dunstctl close-all"
 riverctl map normal Control Grave spawn "dunstctl history-pop"
 riverctl map normal Control Period spawn "dunstctl context"

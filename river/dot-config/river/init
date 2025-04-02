@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/env bash
 
 # This is the example configuration file for river.
 #
@@ -45,16 +45,16 @@ if [[ -f ~/.config/river/local ]]; then
     source ~/.config/river/local
 fi
 
-riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river"
-riverctl spawn "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP"
+riverctl spawn "dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=river XDG_MENU_PREFIX=arch-"
+riverctl spawn "systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_CURRENT_DESKTOP XDG_MENU_PREFIX"
 riverctl spawn "systemctl --user start plasma-polkit-agent"
 riverctl spawn "systemctl --user start autostart.target"
 riverctl spawn waybar
-#riverctl spawn nm-applet
-#riverctl spawn blueman-applet
 riverctl spawn kanshi
 #riverctl spawn "/usr/lib/polkit-kde-authentication-agent-1"
 #riverctl spawn "rivertile -view-padding 6 -outer-padding 6"
 #riverctl spawn "stacktile --per-tag-config --inner-padding 5 --outer-padding 5"
 riverctl spawn dunst
 riverctl spawn wpaperd
+riverctl spawn "~/files/scripts/start_clock"
+riverctl spawn "~/files/scripts/idle_script"
