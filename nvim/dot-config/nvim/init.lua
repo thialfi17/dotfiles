@@ -247,7 +247,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("config-highlight-yank", { clear = true }),
     callback = function()
-        vim.hl.on_yank()
+        vim.highlight.on_yank()
     end,
 })
 
@@ -621,21 +621,6 @@ require("lazy").setup({
     },
     -- }}} WhichKey
 
-    -- Neovim Lua setup: {{{
-    {
-        "folke/lazydev.nvim",
-        ft = "lua", -- only load on lua files
-        opts = {
-            library = {
-                -- See the configuration section for more details
-                -- Load luvit types when the `vim.uv` word is found
-                { path = "luvit-meta/library", words = { "vim%.uv" } },
-            },
-        },
-    },
-    { "Bilal2453/luvit-meta", lazy = true }, -- `vim.uv` typings
-    -- }}}
-
     -- LSP: {{{
     { -- LSP Configuration & Plugins
         "neovim/nvim-lspconfig",
@@ -888,7 +873,17 @@ require("lazy").setup({
                             luasnip.expand_or_jump()
                         end
                     end, { "i", "s" }),
+                    ["<Tab>"] = cmp.mapping(function()
+                        if luasnip.expand_or_locally_jumpable() then
+                            luasnip.expand_or_jump()
+                        end
+                    end, { "i", "s" }),
                     ["<C-h>"] = cmp.mapping(function()
+                        if luasnip.locally_jumpable(-1) then
+                            luasnip.jump(-1)
+                        end
+                    end, { "i", "s" }),
+                    ["<S-Tab>"] = cmp.mapping(function()
                         if luasnip.locally_jumpable(-1) then
                             luasnip.jump(-1)
                         end
@@ -948,19 +943,8 @@ require("lazy").setup({
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         config = function()
-            ---@diagnostic disable-next-line: missing-fields
             require("nvim-treesitter.configs").setup({
-                ensure_installed = {
-                    "bash",
-                    "c",
-                    "html",
-                    "lua",
-                    "markdown",
-                    "vim",
-                    "vimdoc",
-                    "python",
-                    "rust",
-                },
+                ensure_installed = { },
                 -- Autoinstall languages that are not installed
                 auto_install = true,
                 highlight = { enable = true },
