@@ -1,15 +1,22 @@
 -- TODO: Change how the default options are configured for these rules.
 
-function Replace(buf, opts)
+---@type win.SmartRule
+--- Replace the buffer in the current window. Always succeeds.
+function Replace()
     return true
 end
 
-function VertSplit(buf, opts)
+---@type win.SmartRule
+--- Split the window vertically. Always succeeds.
+function VertSplit()
     vim.cmd("vert split")
     return true
 end
 
-function CurrentTab(buf, opts)
+
+---@type win.SmartRule
+--- Look for a window containing the buffer in the current tab.
+function CurrentTab(buf)
     local wins = vim.api.nvim_tabpage_list_wins(0)
 
     for _, win in ipairs(wins) do
@@ -22,7 +29,9 @@ function CurrentTab(buf, opts)
     return false
 end
 
-function FirstTab(buf, opts)
+---@type win.SmartRule
+--- Find the first tab with a window containing the buffer.
+function FirstTab(buf)
     local wins = vim.api.nvim_list_wins()
     for _, win in ipairs(wins) do
         if vim.api.nvim_win_get_buf(win) == buf then
@@ -34,19 +43,28 @@ function FirstTab(buf, opts)
     return false
 end
 
-function NewTab(buf, opts)
+---@type win.SmartRule
+--- Open the window in a new tab.
+function NewTab()
     vim.cmd("tab split")
     return true
 end
 
-function SplitIfBiggerThan(buf, opts)
+---@class SplitIfBiggerThanOpts
+---@field width? integer
+---@field height? integer
+---@field pref_dir? "vertical"|"horizontal"
+
+---@type win.SmartRule
+---@param opts SplitIfBiggerThanOpts
+function SplitIfBiggerThan(_, opts)
     local default_opts = {
-        width = 200,
+        width = 180,
         height = 67,
         pref_dir = "vertical",
     }
-    local opts = opts or {}
-    opts = vim.tbl_extend("keep", opts, def_opts)
+    opts = opts or {}
+    opts = vim.tbl_extend("keep", opts, default_opts)
 
     -- If floating then skip since floating windows can't be split
     if vim.api.nvim_win_get_config(0).relative ~= "" then
@@ -77,7 +95,8 @@ function SplitIfBiggerThan(buf, opts)
     end
 end
 
-function ReplaceRightSplit(buf, opts)
+---@type win.SmartRule
+function ReplaceRightSplit()
     -- Will be made cleaner with #24507 hopefully
     local layout = vim.fn.winlayout()
 
