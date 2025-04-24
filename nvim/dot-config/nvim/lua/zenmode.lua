@@ -15,7 +15,7 @@ local defaults = {
 }
 
 ---@type zenmode.Config
-local options
+local options = defaults
 
 ---@type integer
 local blank_id
@@ -124,7 +124,7 @@ end
 
 ---@param opts? zenmode.Config
 M.setup = function(opts)
-    options = vim.tbl_deep_extend('force', {}, options or defaults, opts or {})
+    options = vim.tbl_deep_extend('keep', opts or {}, options)
 end
 
 ---@class zenmode.OpenOpts
