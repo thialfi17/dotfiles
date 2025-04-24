@@ -222,6 +222,8 @@ vim.keymap.set({ "n" }, "<Leader>cl", "<CMD>set cursorline!<CR>", { desc = "Togg
 vim.keymap.set({ "n" }, "<Leader>cc", "<CMD>set cursorcolumn!<CR>", { desc = "Toggle cursorcolumn" })
 vim.keymap.set({ "n" }, "<Leader>cb", "<CMD>set cursorline! cursorcolumn!<CR>", { desc = "Toggle cursorline and cursorcolumn" })
 
+vim.keymap.set({ "n" }, "<Leader>m", "m'yiw:<C-u>%s/\\<<C-r>\"\\>//gn<CR>`':nohl<CR>", { desc = "Count occurrences of word", silent = true })
+
 -- }}} General Mappings
 
 -- Window/Tab Navigation: {{{
@@ -545,7 +547,7 @@ end
 -- Builtin: {{{
 
 vim.cmd[[ packadd! cfilter ]]
---vim.cmd[[ packadd! matchit ]]
+vim.cmd[[ packadd! matchit ]]
 
 -- }}}
 
@@ -899,17 +901,7 @@ require("lazy").setup({
                             luasnip.expand_or_jump()
                         end
                     end, { "i", "s" }),
-                    ["<Tab>"] = cmp.mapping(function()
-                        if luasnip.expand_or_locally_jumpable() then
-                            luasnip.expand_or_jump()
-                        end
-                    end, { "i", "s" }),
                     ["<C-h>"] = cmp.mapping(function()
-                        if luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
-                        end
-                    end, { "i", "s" }),
-                    ["<S-Tab>"] = cmp.mapping(function()
                         if luasnip.locally_jumpable(-1) then
                             luasnip.jump(-1)
                         end
@@ -973,7 +965,10 @@ require("lazy").setup({
                 ensure_installed = { },
                 -- Autoinstall languages that are not installed
                 auto_install = true,
-                highlight = { enable = true },
+                highlight = {
+                    enable = true,
+                    disable = { "tmux" },
+                },
                 indent = { enable = true },
             })
         end,
