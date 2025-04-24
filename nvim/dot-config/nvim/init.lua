@@ -242,6 +242,17 @@ vim.keymap.set({ "n", "t" }, "<M-8>", "<CMD>8tabnext<CR>", {})
 vim.keymap.set({ "n", "t" }, "<M-9>", "<CMD>9tabnext<CR>", {})
 vim.keymap.set({ "n", "t" }, "<M-0>", "<CMD>10tabnext<CR>", {})
 
+require("win.blocking").setup({
+    additional_mappings_to_overwrite = {
+        n = {
+            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
+        },
+        t = {
+            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
+        },
+    },
+})
+
 -- }}} Window/Tab Navigation
 
 -- Function Key Mappings: {{{
@@ -540,17 +551,6 @@ vim.cmd[[ packadd! cfilter ]]
 
 -- Mine: {{{
 
-require("win.blocking").setup({
-    additional_mappings_to_overwrite = {
-        n = {
-            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
-        },
-        t = {
-            "<M-h>", "<M-j>", "<M-k>", "<M-l>",
-        },
-    }
-})
-require("zenmode").setup()
 require("win.smart_rules")
 
 vim.keymap.set({"n", "t"}, "<M-z>", require("zenmode").toggle, {})

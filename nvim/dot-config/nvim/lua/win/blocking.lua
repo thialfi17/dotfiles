@@ -34,9 +34,6 @@ local defaults = {
     additional_mappings_to_overwrite = {}
 }
 
----@type win.blocking.Config
-local options
-
 --- Keys that have both CTRL-W_# mappings and CTRL-W_CTRL-# mappings
 local wincmd_keys_to_clear = {
     'h', 'j', 'k', 'l', 'w', 't', 'b', 'p',
@@ -54,6 +51,9 @@ end
 for _, key in pairs(wincmd_maps_to_clear) do
     table.insert(defaults.mappings_to_overwrite.n, '<C-W>' .. key)
 end
+
+---@type win.blocking.Config
+local options = defaults
 
 -- Track created mappings
 --- Mappings created to block leaving the window
@@ -211,12 +211,12 @@ end
 
 ---@param opts? win.blocking.Config
 M.setup = function(opts)
-    options = vim.tbl_deep_extend("force", {}, options or defaults, opts or {})
+    options = vim.tbl_extend("keep", opts or {}, options, defaults)
 end
 
 ---@param buf integer Buffer to open in created window
 ---@param opts vim.api.keyset.win_config Window options for opened window
----@param callback fun(win: integer) Callback function that is passed the created window ID
+---@param callback? fun(win: integer) Callback function that is passed the created window ID
 M.open_floating = function(buf, opts, callback)
     callback = callback or function(_) end
 
