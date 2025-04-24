@@ -82,7 +82,7 @@ M.run = function (cmd, opts)
         print("Running cmd (" .. opts.cmd_str .. ")")
     end
 
-    handle, pid = vim.loop.spawn(
+    handle, pid = vim.uv.spawn(
         cmd,
         {
             args = opts.args,
@@ -223,6 +223,8 @@ end
 ---@field name? string Scratch buffer name
 ---@field buf_opts? scratch.BufOpts Table of options to set for the scratch buffer
 ---@field run_opts? command.RunOpts
+---@field win_rules? any
+---@field win_opts? any
 ---@field clear? boolean
 
 ---@param opts command.RunSmartOpts
@@ -237,8 +239,7 @@ M.run_smart = function(cmd, opts)
         return
     end
 
-    -- TODO: Add window opening implementation
-    local loaded, win = true, 0
+    local loaded, win = require("win.smart").open(buf, opts.win_rules, { win_opts = opts.win_opts })
 
     if loaded == false then return end
 
