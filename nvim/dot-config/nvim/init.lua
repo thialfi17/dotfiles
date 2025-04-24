@@ -113,6 +113,31 @@ vim.o.hlsearch = true
 
 -- }}} Options
 
+-- Functions: {{{
+
+---@param file string
+---@param rules win.SmartRules
+OpenFile = function (file, rules)
+    -- Look for file in path
+    local found = vim.fn.findfile(file)
+    if found ~= "" then
+        file = found
+    end
+
+    -- Find buffer, if it exists for the file
+    local buf = vim.fn.bufnr("^" .. file .. "$")
+
+    -- Open a window with the buffer according to the provided rules
+    local loaded, win = require("win.smart").open(buf, rules)
+
+    -- If buffer didn't exist then we need to open it
+    if loaded and buf == -1 then
+        vim.cmd("find " .. file)
+    end
+end
+
+-- }}} Functions
+
 -- Mappings: {{{
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = "\\"
@@ -224,7 +249,7 @@ vim.keymap.set({ "n", "t" }, "<M-0>", "<CMD>10tabnext<CR>", {})
 -- TODO:
 
 -- Open configuration file
-vim.keymap.set({ "n", "t" }, "<F4>", "<CMD>tabe $MYVIMRC<CR>", {})
+vim.keymap.set({ "n", "t" }, "<F4>", function() OpenFile("$MYVIMRC", {CurrentTab, FirstTab, FirstEmptyTab, NewTab}) end)
 
 -- }}} Function Key Mappings
 
@@ -526,6 +551,7 @@ require("win.blocking").setup({
     }
 })
 require("zenmode").setup()
+require("win.smart_rules")
 
 vim.keymap.set({"n", "t"}, "<M-z>", require("zenmode").toggle, {})
 vim.keymap.set({"n", "t"}, "<M-S-z>", function() require("zenmode").toggle({show_tabline = true, show_statusline = false}) end, {})
