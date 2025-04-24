@@ -13,6 +13,24 @@ function VertSplit()
     return true
 end
 
+---@type win.SmartRule
+--- Select the first tab containing just an empty buffer.
+function FirstEmptyTab()
+    for _, tab in pairs(vim.api.nvim_list_tabpages()) do
+        local wins = vim.api.nvim_tabpage_list_wins(tab)
+        if #wins == 1 then
+            local win = wins[1]
+            local buf = vim.api.nvim_win_get_buf(win)
+            local name = vim.api.nvim_buf_get_name(buf)
+
+            if name == "" then
+                vim.api.nvim_set_current_win(win)
+                return true
+            end
+        end
+    end
+    return false
+end
 
 ---@type win.SmartRule
 --- Look for a window containing the buffer in the current tab.
