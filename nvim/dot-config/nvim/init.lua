@@ -327,6 +327,8 @@ vim.api.nvim_create_user_command("Syn", function()
     end
 end, { desc = "Show the syntax highlighting groups under the cursor" })
 
+-- DiffOrig {{{
+-- Open the file in a scratch buffer and perform a live diff against the file on the disk
 vim.api.nvim_create_user_command("DiffOrig", function ()
     local ft = vim.api.nvim_get_option_value("filetype", {})
     local file = vim.api.nvim_buf_get_name(0)
@@ -357,6 +359,23 @@ vim.api.nvim_create_user_command("DiffOrig", function ()
         vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
     end, { desc = "Reload the file from disc" })
 end, {})
+-- }}} DiffOrig
+
+-- Shell Commands: {{{
+
+vim.api.nvim_create_user_command(
+    "R",
+    function (opts)
+        require("command").run(opts.args)
+    end,
+    {
+        nargs = "+",
+        complete = require("user_command").gen_command_complete("R"),
+        desc = "Run a shell command asynchronously",
+    }
+)
+
+-- }}} Shell Commands
 
 -- }}} Commands
 
@@ -585,6 +604,12 @@ vim.cmd[[ packadd! matchit ]]
 -- Mine: {{{
 
 require("win.smart_rules")
+
+-- TODO: Add completions for other shells, maybe make it possible to
+-- automatically detect shell in use?
+require("user_command").setup({
+    cmd = vim.fn.stdpath("config") .. "/scripts/bash_complete",
+})
 
 vim.keymap.set({"n", "t"}, "<M-z>", require("zenmode").toggle, {})
 vim.keymap.set({"n", "t"}, "<M-S-z>", function() require("zenmode").toggle({show_tabline = true, show_statusline = false}) end, {})

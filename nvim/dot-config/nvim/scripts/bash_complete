@@ -1,0 +1,61 @@
+#!/usr/bin/env expect
+
+# https://stackoverflow.com/a/42085887
+# https://creativecommons.org/licenses/by-sa/4.0/
+#
+# Changes:
+#  - Sourcing bash_completion script
+#  - Final expect block does some extra sanitisation of the output
+
+log_user 0
+
+set prompt {/@}
+set cmd [lindex $argv 0]
+
+# start bash with no startup files for clean env
+spawn env INPUTRC=/dev/null PS1=$prompt bash --norc
+expect $prompt
+
+send "source /usr/share/bash-completion/bash_completion\r"
+expect $prompt
+
+# set some readline variables for consistent completion output
+send "bind 'set show-all-if-ambiguous on'\r"
+expect $prompt
+send "bind 'set bell-style none'\r"
+expect $prompt
+send "bind 'set completion-query-items -1'\r"
+expect $prompt
+send "bind 'set page-completions off'\r"
+expect $prompt
+send "bind 'set completion-display-width 0'\r"
+expect $prompt
+
+# run the completion
+send "$cmd\t $prompt"
+expect {
+    # multiple matches, printed on separate lines, followed by prompt
+    -re "^$cmd\r\n(.*)\r\n$prompt$cmd" {
+         set out $expect_out(1,string)
+         regsub -all "\r" $out "" out
+         puts "$out\n"
+    }
+    # single match, completed in-place
+    -re "^$cmd\(\[^ \]*)  $prompt" {
+        set out $expect_out(1,string)
+        regexp "(\[^ \]*)$" $out "" out
+        puts $out
+    }
+    # single match, complete in-place, nospace
+    -re "^$cmd\(\[^ \]*) $prompt" {
+        set out $expect_out(1,string)
+        regexp "(\[^ \]*)$" $out "" out
+        puts $out
+    }
+    # no match
+    -re "^$cmd\(.*) $prompt$" {
+        set out $expect_out(1,string)
+        send_error $out
+        exit
+    }
+}
