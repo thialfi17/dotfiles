@@ -113,6 +113,10 @@ M.run = function (cmd, opts)
         end
     )
 
+    if type(pid) ~= "number" then
+        error(pid)
+    end
+
     M.jobs[job_id] = {
         status = "running",
         pid = pid,
