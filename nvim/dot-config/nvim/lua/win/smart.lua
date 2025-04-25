@@ -21,6 +21,8 @@ function M.open(buf, rules, opts)
     opts = vim.tbl_deep_extend("keep", opts, default_opts)
 
     local loaded = false
+    local prev_win = vim.api.nvim_get_current_win()
+
     for _, rule in ipairs(rules) do
         if type(rule) == "function" then
             loaded = rule(buf)
@@ -48,6 +50,10 @@ function M.open(buf, rules, opts)
 
     for opt, val in pairs(opts.win_opts) do
         vim.wo[win][opt] = val
+    end
+
+    if opts.focus == false then
+        vim.api.nvim_set_current_win(prev_win)
     end
 
     -- Return created/found win in case it doesn't have focus
