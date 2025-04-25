@@ -466,22 +466,31 @@ function Tabline()
         -- Format the filename
         local win_id = vim.api.nvim_tabpage_get_win(tabpage)
         local buf_id = vim.api.nvim_win_get_buf(win_id)
-        local file_type = vim.api.nvim_get_option_value("filetype", { buf = buf_id })
-        local file_name = vim.api.nvim_buf_get_name(buf_id)
+        local buf_type = vim.api.nvim_get_option_value("buftype", { buf = buf_id })
+        local fname = vim.api.nvim_buf_get_name(buf_id)
 
         local prefix = ""
         local body = ""
         local suffix = ""
 
-        if file_type == "help" then
-            body = "help:" .. vim.fn.fnamemodify(file_name, ":t")
-        elseif file_type == "quickfix" then
+        if buf_type == "help" then
+            body = "help:" .. vim.fn.fnamemodify(fname, ":t")
+        elseif buf_type == "quickfix" then
             body = "Quickfix"
-        elseif file_type == "nofile" then
-            print("[TABLINE] File type is NOFILE")
+        elseif buf_type == "nofile" then
+            if string.match(fname, "://") then
+                prefix = string.match(fname, "^.*://")
+                body = string.match(fname, "^.*://(.*)")
+            else
+                body = vim.fn.fnamemodify(fname, ":~:.")
+            end
         else -- Normal file
-            prefix = vim.fn.fnamemodify(file_name, ":~:.:h:p")
-            body = vim.fn.fnamemodify(file_name, ":t")
+            if fname == "" then
+                body = "[No Name]"
+            else
+                prefix = vim.fn.fnamemodify(fname, ":~:.:h:p")
+                body = vim.fn.fnamemodify(fname, ":t")
+            end
 
             -- Attempt to replace absolute path with relative path
             if string.match(prefix, "^/") then
@@ -516,7 +525,7 @@ function Tabline()
 
             if prefix == "." then
                 prefix = ""
-            else
+            elseif prefix ~= "" then
                 prefix = prefix .. "/"
             end
         end
