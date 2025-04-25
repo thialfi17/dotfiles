@@ -243,7 +243,7 @@ M.run_smart = function(cmd, opts)
         return
     end
 
-    local loaded, win = require("win.smart").open(buf, opts.win_rules, { win_opts = opts.win_opts })
+    local loaded, win = require("win.smart").open(buf, opts.win_rules, opts.win_opts)
 
     if loaded == false then return end
 
