@@ -1,3 +1,6 @@
+-- Needs to be loaded before functions inside are referenced elsewhere, so put at the top
+require("win.smart_rules")
+
 -- Options: {{{
 -- NOTE: vim.opt is soft deprecated and is slated to be removed at _some_ point
 -- in the future
@@ -375,6 +378,28 @@ vim.api.nvim_create_user_command(
     }
 )
 
+local add_shell_command = function (cmd, rules, desc)
+    vim.api.nvim_create_user_command(
+        cmd,
+        function (opts)
+            require("command").run_smart(opts.args, {
+                win_rules = rules,
+                win_opts = { focus = not opts.bang },
+            })
+        end,
+        {
+            nargs = "+",
+            bang = true,
+            complete = require("user_command").gen_command_complete(cmd),
+            desc = desc,
+        }
+    )
+end
+
+add_shell_command("RR", { CurrentTab, Replace }, "Run a shell command and open the results in the current (or existing) window")
+add_shell_command("RS", { CurrentTab, SplitIfBiggerThan, VertSplit }, "Run a shell command and put the results in a new split")
+add_shell_command("RRS", { CurrentTab, ReplaceRightSplit, SplitIfBiggerThan, VertSplit }, "Run a shell command and put the results in a window on the right")
+
 -- }}} Shell Commands
 
 -- }}} Commands
@@ -602,8 +627,6 @@ vim.cmd[[ packadd! matchit ]]
 -- }}}
 
 -- Mine: {{{
-
-require("win.smart_rules")
 
 -- TODO: Add completions for other shells, maybe make it possible to
 -- automatically detect shell in use?
