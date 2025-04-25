@@ -41,12 +41,11 @@ end
 ---@param opts? scratch.OpenOpts Options for opening the scratch buffer
 ---@return boolean success Success or fail
 M.open = function(name, opts)
-    local opts = opts or {}
     local default_opts = {
         buf_opts = nil,
         open_fun = vim.api.nvim_set_current_buf,
     }
-    opts = vim.tbl_extend("keep", opts, default_opts)
+    opts = vim.tbl_extend("keep", opts or {}, default_opts)
 
     if name == nil then
         vim.ui.input({ prompt = "Call scratch buffer: " }, function(input)
