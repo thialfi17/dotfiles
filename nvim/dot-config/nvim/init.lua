@@ -327,6 +327,37 @@ vim.api.nvim_create_user_command("Syn", function()
     end
 end, { desc = "Show the syntax highlighting groups under the cursor" })
 
+vim.api.nvim_create_user_command("DiffOrig", function ()
+    local ft = vim.api.nvim_get_option_value("filetype", {})
+    local file = vim.api.nvim_buf_get_name(0)
+
+    local loaded, win
+    require("scratch").open("diff://" .. file, {
+        buf_opts = {
+            ft = ft,
+        },
+        open_fun = function (buf)
+            loaded, win = require("win.smart").open(buf, { CurrentTab, ReplaceRightSplit, SplitIfBiggerThan }, {
+                focus = false,
+            })
+        end,
+    })
+
+    if loaded == false then return end
+
+    local buf = vim.api.nvim_win_get_buf(win)
+    local lines = vim.fn.readfile(file)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+    vim.api.nvim_win_call(win, function() vim.cmd("diffthis") end)
+    vim.cmd("diffthis")
+
+    vim.keymap.set({ "n" }, "<F5>", function ()
+        local lines = vim.fn.readfile(file)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    end, { desc = "Reload the file from disc" })
+end, {})
+
 -- }}} Commands
 
 -- File Finding and Editing: {{{
