@@ -23,6 +23,11 @@ function M.open(buf, rules, opts)
     local loaded = false
     local prev_win = vim.api.nvim_get_current_win()
 
+    if #rules == 0 then
+        print("No rules passed to for opening a window!")
+        return false, nil
+    end
+
     for _, rule in ipairs(rules) do
         if type(rule) == "function" then
             loaded = rule(buf)
@@ -41,7 +46,7 @@ function M.open(buf, rules, opts)
         end
     end
 
-    if not loaded and #rules > 0 then
+    if not loaded then
         print("No rule succeeded in picking a window!")
         return false, nil
     end
