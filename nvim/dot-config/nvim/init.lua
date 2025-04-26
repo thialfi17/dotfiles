@@ -108,8 +108,18 @@ vim.o.sidescroll = 10
 -- Always show the tabline
 vim.o.showtabline = 2
 
--- Change default grep arguments for built in grep searches
-vim.o.grepprg = "grep -nE $* /dev/null"
+-- Change default grep arguments for built in :grep searches to support extended regex
+if vim.o.grepprg:match("^grep") then
+    vim.o.grepprg = "grep -nEIH $* /dev/null"
+    -- Not changed just set to ensure it's correct for 'grepprg'
+    vim.o.grepformat = "%f:%l:%m,%f:%l%m,%f  %l%m"
+end
+-- Change default rg arguments for built in :grep searches to follow symlinks
+if vim.o.grepprg:match("^rg") then
+    vim.o.grepprg = "rg --vimgrep -uu -L"
+    -- Not changed just set to ensure it's correct for 'grepprg'
+    vim.o.grepformat = "%f:%l:%c:%m"
+end
 
 -- Highlight search results
 vim.o.hlsearch = true
