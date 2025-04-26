@@ -538,21 +538,23 @@ function Tabline()
         -- Handle the suffix (things like window count)
         local suffix_parts = {}
 
+        -- Show if current buffer has been modified
         if vim.api.nvim_get_option_value("modified", { buf = buf_id }) then
             table.insert(suffix_parts, "*")
         end
 
+        -- Seperately show if any other windows in the tab have been modified
         local modified = ""
         for _, win in pairs(wins_list) do
             local buf = vim.api.nvim_win_get_buf(win)
+            local skip = false
             if buf == buf_id then
-                goto continue
+                skip = true
             end
-            if vim.api.nvim_get_option_value("modified", { buf = buf }) then
+            if not skip and vim.api.nvim_get_option_value("modified", { buf = buf }) then
                 modified = "*"
                 break
             end
-            ::continue::
         end
 
         -- Form suffix
