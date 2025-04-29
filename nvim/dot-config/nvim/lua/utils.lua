@@ -1,5 +1,27 @@
 local M = {}
 
+--- Check if module is available in the search paths.
+---
+--- Taken from: https://stackoverflow.com/a/15434737
+--- License: https://creativecommons.org/licenses/by-sa/3.0/
+--- See https://www.lua.org/manual/5.1/manual.html#pdf-require
+---@param module string
+---@return boolean
+M.is_module_available = function (module)
+    if package.loaded[module] then
+        return true
+    else
+        for _, searcher in ipairs(package.loaders) do
+            local loader = searcher(module)
+            if type(loader) == "function" then
+                package.preload[module] = loader
+                return true
+            end
+        end
+        return false
+    end
+end
+
 --- Function to parse args passed to a user command and split them based on
 --- quotes
 ---@param cmd string Command as received on the commandline
