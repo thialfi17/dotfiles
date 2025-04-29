@@ -407,6 +407,7 @@ end
 add_shell_command("RR", { CurrentTab, Replace }, "Run a shell command and open the results in the current (or existing) window")
 add_shell_command("RS", { CurrentTab, SplitIfBiggerThan, VertSplit }, "Run a shell command and put the results in a new split")
 add_shell_command("RRS", { CurrentTab, ReplaceRightSplit, SplitIfBiggerThan, VertSplit }, "Run a shell command and put the results in a window on the right")
+add_shell_command("RT", { CurrentTab, FirstTab, SplitIfBiggerThan, NewTab }, "Run a shell command and go to existing window, put the results in a split if there is room or in a new tab")
 
 -- }}} Shell Commands
 
@@ -421,6 +422,15 @@ end, {
     nargs = "+",
     bang = true,
     complete = "file",
+})
+
+-- Not really needed
+vim.api.nvim_create_user_command("UnloadLua", [[
+    for name in map(filter(getbufinfo({"bufloaded": 1}), 'match(v:val.name, ".lua$") != -1'), 'fnameescape(v:val.name)')
+        exec "bwipeout" name
+    endfor
+]], {
+    nargs = 0,
 })
 
 -- }}} Commands
