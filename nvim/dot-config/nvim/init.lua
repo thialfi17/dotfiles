@@ -670,6 +670,10 @@ vim.cmd[[ packadd! matchit ]]
 
 -- Mine: {{{
 
+if require("utils").is_module_available("local") then require("local") end
+
+vim.keymap.set({"n"}, "<F1>", require("projects").choose_project, {})
+
 -- TODO: Add completions for other shells, maybe make it possible to
 -- automatically detect shell in use?
 require("user_command").setup({
