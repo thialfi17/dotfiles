@@ -272,8 +272,6 @@ require("win.blocking").setup({
 
 -- Function Key Mappings: {{{
 
--- TODO:
-
 -- Open configuration file
 vim.keymap.set({ "n", "t" }, "<F4>", function() OpenFile("$MYVIMRC", {CurrentTab, FirstTab, FirstEmptyTab, NewTab}) end)
 
@@ -411,6 +409,19 @@ add_shell_command("RS", { CurrentTab, SplitIfBiggerThan, VertSplit }, "Run a she
 add_shell_command("RRS", { CurrentTab, ReplaceRightSplit, SplitIfBiggerThan, VertSplit }, "Run a shell command and put the results in a window on the right")
 
 -- }}} Shell Commands
+
+vim.api.nvim_create_user_command("G", function (args)
+    require("grep").grep(args, {
+        cmd = "rg",
+        efm = "%f:%l:%c:%m",
+        default_flags = {"--vimgrep", "-LHn"},
+        default_recurse_flag = "", -- rg is always recursive when a folder is given
+    })
+end, {
+    nargs = "+",
+    bang = true,
+    complete = "file",
+})
 
 -- }}} Commands
 
