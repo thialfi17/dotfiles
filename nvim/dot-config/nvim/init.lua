@@ -1049,24 +1049,49 @@ require("lazy").setup({
         lazy = false,
         priority = 1000,
         config = function()
+            vim.api.nvim_create_autocmd("ColorScheme", {
+                group = vim.api.nvim_create_augroup("config.colorscheme", { clear = false }),
+                pattern = "gruvbox-material",
+                desc = "Update custom highlight groups when colorscheme is set",
+                callback = function()
+                    vim.cmd[[
+                        let s:configuration = gruvbox_material#get_configuration()
+                        let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
+
+                        call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
+                        call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
+                        call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
+                        call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
+                    ]]
+                end,
+            })
+
+            vim.api.nvim_create_autocmd("OptionSet", {
+                group = vim.api.nvim_create_augroup("config.colorscheme", { clear = false }),
+                pattern = "background",
+                desc = "Update custom highlight groups when 'background' changes",
+                callback = function()
+                    vim.cmd[[
+                        let s:configuration = gruvbox_material#get_configuration()
+                        let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
+
+                        call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
+                        call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
+                        call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
+                        call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
+                    ]]
+                end,
+            })
+
             vim.cmd[[
-                " TODO: Make this more generic and add to autocmd
                 let g:gruvbox_material_foreground = 'original'
                 let g:gruvbox_material_disable_italic_comment = 1
                 let g:gruvbox_material_ui_contrast = 'high'
-
-                let s:configuration = gruvbox_material#get_configuration()
-                let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
 
                 colorscheme gruvbox-material
 
                 highlight! link ModeMsg MoreMsg
                 highlight! link TSPunctBracket TSOperator
-
-                call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
-                call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
-                call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
-                call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
             ]]
         end,
     },
