@@ -6,7 +6,7 @@ local M = {}
 ---@field name? string Project name
 ---@field name_extr? string Pattern for finding projects based on matched project paths. Project names are created from the first match group.
 ---@field type string Project type. This should be the name of a lua module containing a project setup function
----@field opts? table Extra project options (specific to project type) which are passed to the project setup function
+---@field opts table Extra project options (specific to project type) which are passed to the project setup function
 
 ---@class project.SetupOpts
 ---@field search_paths project.ProjectClass[]
@@ -98,7 +98,7 @@ M.get_projects = function ()
 
             -- Add the workspace to the list of workspaces. Works because workspaces is a reference
             local workspaces = projects[workspace.proj]
-            workspaces[#workspaces+1] = workspace
+            workspaces[workspace.disp] = workspace
         end
     end
 
@@ -110,11 +110,12 @@ end
 
 M.load_workarea = function (workarea)
     local status, err = pcall(require("projects." .. workarea.type).load_workarea, workarea)
+    local proj = table.concat({workarea.proj, " (", workarea.disp, ")"})
 
     if status then
-        vim.notify("Loaded project settings for " .. workarea.disp, vim.log.levels.INFO)
+        vim.notify("Loaded project settings for: " .. proj, vim.log.levels.INFO)
     else
-        vim.notify("Failed to load workarea " .. workarea.disp .. " of project type " .. workarea.type, vim.log.levels.ERROR)
+        vim.notify("Failed to load project " .. proj .. " of project type " .. workarea.type, vim.log.levels.ERROR)
         vim.notify(err, vim.log.levels.DEBUG)
     end
 end
@@ -140,15 +141,16 @@ M.choose_project = function ()
             return
         end
 
-        -- Get a list of workareanames (already seems to be sorted hence ipairs)
+        -- Get a list of workareanames
         local workarea_names = {}
-        for _, v in ipairs(workareas) do
-            workarea_names[#workarea_names+1] = v.disp
+        for k, _ in pairs(workareas) do
+            workarea_names[#workarea_names+1] = k
         end
+        table.sort(workarea_names)
 
         local win = require("popup").list(" Workarea: ", workarea_names, function(workarea_idx)
             -- Get workarea information
-            local workarea = workareas[workarea_idx]
+            local workarea = workareas[workarea_names[workarea_idx]]
 
             M.load_workarea(workarea)
         end)
