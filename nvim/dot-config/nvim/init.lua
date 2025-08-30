@@ -134,6 +134,8 @@ OpenFile = function (file, rules)
     -- Look for file in path
     local found = vim.fn.findfile(file)
     if found ~= "" then
+        -- findfile returns string[] only when count is -ve
+        ---@diagnostic disable-next-line: cast-local-type
         file = found
     end
 
@@ -141,7 +143,7 @@ OpenFile = function (file, rules)
     local buf = vim.fn.bufnr("^" .. file .. "$")
 
     -- Open a window with the buffer according to the provided rules
-    local loaded, win = require("win.smart").open(buf, rules)
+    local loaded, _ = require("win.smart").open(buf, rules)
 
     -- If buffer didn't exist then we need to open it
     if loaded and buf == -1 then
@@ -183,7 +185,7 @@ vim.keymap.set({ "t" }, "<C-w>:", function()
     local group = vim.api.nvim_create_augroup("term_cmd", { clear = true })
 
     vim.api.nvim_create_autocmd(
-        "CmdLineLeave",
+        "CmdlineLeave",
         {
             desc = "Handle leaving the cmdwin when entered via <C-w>:",
             group = group,
@@ -359,8 +361,11 @@ vim.api.nvim_create_user_command("DiffOrig", function ()
     if loaded == false then return end
 
     local buf = vim.api.nvim_win_get_buf(win)
-    local lines = vim.fn.readfile(file)
-    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+
+    do
+        local lines = vim.fn.readfile(file)
+        vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+    end
 
     vim.api.nvim_win_call(win, function() vim.cmd("diffthis") end)
     vim.cmd("diffthis")

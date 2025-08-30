@@ -2,8 +2,8 @@ local M = {}
 
 ---@return integer|nil BufferID
 local find_buf_by_name = function(name)
-    local name = vim.fn.fnameescape(name)
-    local buf = vim.fn.bufnr(name)
+    local escaped_name = vim.fn.fnameescape(name)
+    local buf = vim.fn.bufnr(escaped_name)
 
     if buf == -1 then
         return nil
@@ -18,7 +18,6 @@ end
 ---@return integer|nil BufferID
 M.create = function(name, opts)
     local buf = find_buf_by_name(name) or vim.api.nvim_create_buf(false, true)
-    local opts = opts or {}
 
     if buf == 0 then
         print("Could not create scratch buffer")

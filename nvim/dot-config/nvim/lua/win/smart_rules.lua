@@ -123,6 +123,8 @@ function ReplaceRightSplit()
         while indx > 0 do
             local winl = layout[2][indx]
             if winl[1] == "leaf" then
+                -- Next entry must be a window ID (integer) if this is a "leaf" type
+                ---@diagnostic disable-next-line: param-type-mismatch
                 vim.api.nvim_set_current_win(winl[2])
                 return true
             end

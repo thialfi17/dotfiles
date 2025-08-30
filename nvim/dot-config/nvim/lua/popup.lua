@@ -43,7 +43,7 @@ local function open_windows(title, lines, opts)
     local title_id = vim.api.nvim_open_win(title_bid, false, title_opts)
 
     -- Open title window first since blocking windows automatically close when a new window is opened.
-    local window_id = require("win/blocking").open_floating(window_bid, window_opts)
+    local window_id = require("win.blocking").open_floating(window_bid, window_opts)
     vim.api.nvim_set_option_value("cursorline", true, { scope = "local", win = window_id })
     vim.api.nvim_set_option_value("winhl", "Cursor:helpNote,FloatBorder:NormalFloat", { scope = "local", win = window_id })
 
