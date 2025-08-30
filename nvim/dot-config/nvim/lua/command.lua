@@ -231,12 +231,13 @@ end
 ---@field win_opts? any
 ---@field clear? boolean
 
+---@param cmd string
 ---@param opts command.RunSmartOpts
 M.run_smart = function(cmd, opts)
     opts = opts or {}
 
     local name = opts.name or ("cmd://" .. cmd)
-    local buf = require("scratch").create(name, opts.buf_opts)
+    local buf = require("scratch").create(name, opts.buf_opts or {})
 
     if buf == nil then
         error("Failed to open scratch buffer")
