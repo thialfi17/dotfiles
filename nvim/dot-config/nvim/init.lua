@@ -304,6 +304,32 @@ vim.keymap.set({ "ca" }, "ln", "lnext", {})
 
 -- Autocommands: {{{
 
+local dont_restore_fts = {
+    "gitcommit",
+    "gitrebase",
+}
+vim.api.nvim_create_autocmd("BufWinEnter", {
+    desc = "Restore previous cursor position when loading a file",
+    callback = function()
+        -- Skip listed filetypes
+        for _, k in pairs(dont_restore_fts) do
+            if vim.o.filetype == k then
+                return
+            end
+        end
+
+        local pos = vim.pos.mark(0, unpack(vim.api.nvim_buf_get_mark(0, '"')))
+        vim.api.nvim_win_set_cursor(0, pos:to_cursor())
+        vim.cmd("norm! zv")
+
+        if pos.row == vim.api.nvim_buf_line_count(0) - 1 then
+            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-e>", true, false, true), "n", false)
+        else
+        vim.cmd("norm! zz")
+        end
+    end,
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("config-highlight-yank", { clear = true }),
