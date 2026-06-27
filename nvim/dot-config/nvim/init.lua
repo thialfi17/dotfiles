@@ -182,6 +182,7 @@ vim.keymap.set({ "n" }, "N", [[Nzz]], { silent = true })
 -- One-off cmd in terminal mode {{{
 vim.keymap.set({ "t" }, "<C-w>:", function()
     local win = vim.api.nvim_get_current_win()
+    local buf = vim.api.nvim_get_current_buf()
     local group = vim.api.nvim_create_augroup("term_cmd", { clear = true })
 
     vim.api.nvim_create_autocmd(
@@ -191,11 +192,6 @@ vim.keymap.set({ "t" }, "<C-w>:", function()
             group = group,
             once = true,
             callback = function()
-                -- Default to entering insert mode because we can't detect when
-                -- we have re-entered the window we came from, but can detect
-                -- when we have entered a different window.
-                vim.cmd("startinsert")
-
                 -- Exit insert mode if we entered another window
                 vim.api.nvim_create_autocmd(
                     "WinEnter",
@@ -205,6 +201,20 @@ vim.keymap.set({ "t" }, "<C-w>:", function()
                         once = true,
                         callback = function()
                             if vim.api.nvim_get_current_win() ~= win then
+                                vim.cmd("stopinsert")
+                            end
+                        end,
+                    }
+                )
+                -- Exit insert mode if we entered another buffer
+                vim.api.nvim_create_autocmd(
+                    "BufEnter",
+                    {
+                        desc = "Exit insert mode when command resulted in entering a different window",
+                        group = group,
+                        once = true,
+                        callback = function()
+                            if vim.api.nvim_get_current_buf() ~= buf then
                                 vim.cmd("stopinsert")
                             end
                         end,
@@ -223,7 +233,7 @@ vim.keymap.set({ "t" }, "<C-w>:", function()
     )
 
     vim.api.nvim_feedkeys(
-        vim.api.nvim_replace_termcodes("<C-\\><C-n>:", true, false, true),
+        vim.api.nvim_replace_termcodes("<C-\\><C-o>:", true, false, true),
         "nt", -- Do not remap and handle as if they were typed
         false -- Don't replace special stuff since we did that already
     )
