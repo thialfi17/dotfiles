@@ -334,14 +334,13 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("config-highlight-yank", { clear = true }),
     callback = function()
-        vim.highlight.on_yank()
+        vim.hl.hl_op()
     end,
 })
 
 vim.api.nvim_create_autocmd({ "VimResized", "WinNew" }, {
     desc = "Resize windows",
     group = vim.api.nvim_create_augroup("config-resize-windows", { clear = true }),
-    pattern = { "" },
     command = "wincmd =",
 })
 
@@ -361,7 +360,6 @@ vim.api.nvim_create_autocmd({ "TermOpen", "BufEnter" }, {
 vim.api.nvim_create_autocmd({ "TermClose" }, {
     desc = "Exit insert mode when terminal job finishes. Prevents accidentally closing the window.",
     group = vim.api.nvim_create_augroup("config-term-windows", { clear = false }),
-    pattern = { "" },
     command = "stopinsert",
 })
 
