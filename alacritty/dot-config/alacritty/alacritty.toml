@@ -67,14 +67,11 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [window]
 decorations = "full"
-dynamic_padding = false
-opacity = 0.8
+dynamic_padding = true
+opacity = 0.9
 startup_mode = "Windowed"
 
 [window.dimensions]
 columns = 80
 lines = 24
 
-[window.padding]
-x = 5
-y = 5
