@@ -319,6 +319,12 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         end
 
         local pos = vim.pos.mark(0, unpack(vim.api.nvim_buf_get_mark(0, '"')))
+        local max_rows = vim.api.nvim_buf_line_count(0) - 1
+
+        if pos.row > max_rows then
+            return
+        end
+
         vim.api.nvim_win_set_cursor(0, pos:to_cursor())
         vim.cmd("norm! zv")
 
