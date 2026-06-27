@@ -382,6 +382,22 @@ vim.api.nvim_create_autocmd({ "TermClose" }, {
     command = "stopinsert",
 })
 
+vim.api.nvim_create_autocmd({ "ColorScheme" }, {
+    desc = "Setup highlight groups for custom tabline",
+    group = vim.api.nvim_create_augroup("config-colorscheme-tabline", { clear = true }),
+    callback = function()
+        local hl_tab_line = vim.api.nvim_get_hl(0, { create = false, name = "TabLine" })
+        local hl_tab_line_sel = vim.api.nvim_get_hl(0, { create = false, name = "TabLineSel" })
+
+        hl_tab_line_sel.bg = hl_tab_line.bg
+        hl_tab_line_sel.ctermbg = hl_tab_line.ctermbg
+
+        vim.api.nvim_set_hl(0, "TabLineSel", hl_tab_line_sel)
+        --vim.api.nvim_set_hl(0, "TabNum", hl_tab_line)
+        --vim.api.nvim_set_hl(0, "TabNumSel", hl_tab_line_sel)
+    end,
+})
+
 -- }}} Autocommands
 
 -- Commands: {{{
@@ -743,448 +759,110 @@ vim.keymap.set({"n", "t"}, "<M-S-z>", function() require("zenmode").toggle({show
 
 -- }}} Mine
 
--- Install Plugin Manager: {{{
---    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-    local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-    vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-end ---@diagnostic disable-next-line: undefined-field
-vim.opt.rtp:prepend(lazypath)
-
--- }}} Install Plugin Manager
-
 -- Install and Configure Plugins: {{{
---
---  To check the current status of your plugins, run
---    :Lazy
---
---  You can press `?` in this menu for help. Use `:q` to close the window
---
---  To update plugins, you can run
---    :Lazy update
---
--- NOTE: Here is where you install your plugins.
-require("lazy").setup({
-    -- This section is pretty much copied from kickstart.nvim
-    --
-    -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-
-    -- NOTE: Plugins can also be added by using a table,
-    -- with the first argument being the link and the following
-    -- keys can be used to configure plugin behavior/loading/etc.
-    --
-    -- Use `opts = {}` to force a plugin to be loaded.
-    --
-    --  This is equivalent to:
-    --    require('Comment').setup({})
-
-    -- NOTE: Plugins can also be configured to run lua code when they are loaded.
-    --
-    -- This is often very useful to both group configuration, as well as handle
-    -- lazy loading plugins that don't need to be loaded immediately at startup.
-    --
-    -- For example, in the following configuration, we use:
-    --  event = 'VimEnter'
-    --
-    -- which loads which-key before all the UI elements are loaded. Events can be
-    -- normal autocommands events (`:help autocmd-events`).
-    --
-    -- Then, because we use the `config` key, the configuration only runs
-    -- after the plugin has been loaded:
-    --  config = function() ... end
-
-    -- NOTE: Plugins can specify dependencies.
-    --
-    -- The dependencies are proper plugin specifications as well - anything
-    -- you do for a plugin at the top level, you can do for a dependency.
-    --
-    -- Use the `dependencies` key to specify the dependencies of a particular plugin
-
-    "tpope/vim-sleuth", -- Detect tabstop and shiftwidth automatically
-
-    -- gitsigns: {{{
-    { -- Adds git related signs to the gutter, as well as utilities for managing changes
-        "lewis6991/gitsigns.nvim",
-        opts = {
-            signs = {
-                add = { text = "+" },
-                change = { text = "~" },
-                delete = { text = "_" },
-                topdelete = { text = "‾" },
-                changedelete = { text = "~" },
-            },
-        },
-    },
-    -- }}} gitsigns
-
-    -- WhichKey: {{{
-    { -- Useful plugin to show you pending keybinds.
-        "folke/which-key.nvim",
-        event = "VimEnter", -- Sets the loading event to 'VimEnter'
-        config = function() -- This is the function that runs, AFTER loading
-            --require("which-key").setup()
-
-            -- Document existing key chains
-            require("which-key").add({
-            })
-        end,
-    },
-    -- }}} WhichKey
-
-    -- LSP: {{{
-    { -- LSP Configuration & Plugins
-        "neovim/nvim-lspconfig",
-        dependencies = {
-            -- Useful status updates for LSP.
-            -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-            { "j-hui/fidget.nvim", opts = {} },
-        },
-        config = function()
-            --  This function gets run when an LSP attaches to a particular buffer.
-            --    That is to say, every time a new file is opened that is associated with
-            --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
-            --    function will be executed to configure the current buffer
-            vim.api.nvim_create_autocmd("LspAttach", {
-                group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
-                callback = function(event)
-                    -- NOTE: Remember that lua is a real programming language, and as such it is possible
-                    -- to define small helper and utility functions so you don't have to repeat yourself
-                    -- many times.
-                    --
-                    -- In this case, we create a func that lets us more easily define mappings specific
-                    -- for LSP related items. It sets the mode, buffer and description for us each time.
-                    local map = function(keys, func, desc)
-                        vim.keymap.set(
-                            "n",
-                            keys,
-                            func,
-                            { buffer = event.buf, desc = "LSP: " .. desc }
-                        )
-                    end
-
-                    -- -- Jump to the definition of the word under your cursor.
-                    -- --  This is where a variable was first declared, or where a function is defined, etc.
-                    -- --  To jump back, press <C-T>.
-                    -- map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-                    --
-                    -- -- Find references for the word under your cursor.
-                    -- map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-                    --
-                    -- -- Jump to the implementation of the word under your cursor.
-                    -- --  Useful when your language has ways of declaring types without an actual implementation.
-                    -- map(
-                    --     "gI",
-                    --     require("telescope.builtin").lsp_implementations,
-                    --     "[G]oto [I]mplementation"
-                    -- )
-                    --
-                    -- -- Jump to the type of the word under your cursor.
-                    -- --  Useful when you're not sure what type a variable is and you want to see
-                    -- --  the definition of its *type*, not where it was *defined*.
-                    -- map(
-                    --     "<leader>D",
-                    --     require("telescope.builtin").lsp_type_definitions,
-                    --     "Type [D]efinition"
-                    -- )
-                    --
-                    -- -- Fuzzy find all the symbols in your current document.
-                    -- --  Symbols are things like variables, functions, types, etc.
-                    -- map(
-                    --     "<leader>ds",
-                    --     require("telescope.builtin").lsp_document_symbols,
-                    --     "[D]ocument [S]ymbols"
-                    -- )
-                    --
-                    -- -- Fuzzy find all the symbols in your current workspace
-                    -- --  Similar to document symbols, except searches over your whole project.
-                    -- map(
-                    --     "<leader>ws",
-                    --     require("telescope.builtin").lsp_dynamic_workspace_symbols,
-                    --     "[W]orkspace [S]ymbols"
-                    -- )
-                    --
-                    -- Rename the variable under your cursor
-                    --  Most Language Servers support renaming across files, etc.
-                    map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-                    --
-                    -- -- Execute a code action, usually your cursor needs to be on top of an error
-                    -- -- or a suggestion from your LSP for this to activate.
-                    -- map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-                    --
-                    -- -- Opens a popup that displays documentation about the word under your cursor
-                    -- --  See `:help K` for why this keymap
-                    -- map("K", vim.lsp.buf.hover, "Hover Documentation")
-                    --
-                    -- -- WARN: This is not Goto Definition, this is Goto Declaration.
-                    -- --  For example, in C this would take you to the header
-                    -- map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-
-                    -- The following two autocommands are used to highlight references of the
-                    -- word under your cursor when your cursor rests there for a little while.
-                    --    See `:help CursorHold` for information about when this is executed
-                    --
-                    -- When you move your cursor, the highlights will be cleared (the second autocommand).
-                    local client = vim.lsp.get_client_by_id(event.data.client_id)
-                    if client and client.server_capabilities.documentHighlightProvider then
-                        vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-                            buffer = event.buf,
-                            callback = vim.lsp.buf.document_highlight,
-                        })
-
-                        vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
-                            buffer = event.buf,
-                            callback = vim.lsp.buf.clear_references,
-                        })
-                    end
-                end,
-            })
-
-            -- LSP servers and clients are able to communicate to each other what features they support.
-            --  By default, Neovim doesn't support everything that is in the LSP Specification.
-            --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-            --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
-            local capabilities = vim.lsp.protocol.make_client_capabilities()
-            capabilities = vim.tbl_deep_extend(
-                "force",
-                capabilities,
-                require("cmp_nvim_lsp").default_capabilities()
-            )
-
-            -- Enable the following language servers
-            --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-            --
-            --  Add any additional override configuration in the following tables. Available keys are:
-            --  - cmd (table): Override the default command used to start the server
-            --  - filetypes (table): Override the default list of associated filetypes for the server
-            --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
-            --  - settings (table): Override the default settings passed when initializing the server.
-            --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-            local servers = {
-
-                lua_ls = {
-                    -- cmd = {...},
-                    -- filetypes { ...},
-                    -- capabilities = {},
-                    settings = {
-                        Lua = {
-                            runtime = { version = "LuaJIT" },
-                            workspace = {
-                                --checkThirdParty = false,
-                                -- Tells lua_ls where to find all the Lua files that you have loaded
-                                -- for your neovim configuration.
-                                --library = {
-                                --    "${3rd}/luv/library",
-                                --    unpack(vim.api.nvim_get_runtime_file("", true)),
-                                --},
-                                -- If lua_ls is really slow on your computer, you can try this instead:
-                                -- library = { vim.env.VIMRUNTIME },
-                            },
-                            completion = {
-                                callSnippet = "Replace",
-                            },
-                            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-                            -- diagnostics = { disable = { 'missing-fields' } },
-                        },
-                    },
-                },
-            }
-
-            for name, config in pairs(servers) do
-                require("lspconfig")[name].setup(config)
-            end
-        end,
-    },
-    -- }}} LSP
-
-    -- Rustaceanvim: {{{
-    {
-        "mrcjkb/rustaceanvim",
-        version = "^4", -- Recommended
-        ft = { "rust" },
-    },
-    -- }}} Rustaceanvim
-
-    -- nvim-cmp (Completion): {{{
-    { -- Autocompletion
-        "hrsh7th/nvim-cmp",
-        event = "InsertEnter",
-        dependencies = {
-            -- Snippet Engine & its associated nvim-cmp source
-            {
-                "L3MON4D3/LuaSnip",
-                build = (function()
-                    -- Build Step is needed for regex support in snippets
-                    -- This step is not supported in many windows environments
-                    -- Remove the below condition to re-enable on windows
-                    if vim.fn.has("win32") == 1 or vim.fn.executable("make") == 0 then
-                        return
-                    end
-                    return "make install_jsregexp"
-                end)(),
-            },
-            "saadparwaiz1/cmp_luasnip",
-
-            -- Adds other completion capabilities.
-            --  nvim-cmp does not ship with all sources by default. They are split
-            --  into multiple repos for maintenance purposes.
-            "hrsh7th/cmp-nvim-lsp",
-            "hrsh7th/cmp-path",
-
-            -- If you want to add a bunch of pre-configured snippets,
-            --    you can use this plugin to help you. It even has snippets
-            --    for various frameworks/libraries/etc. but you will have to
-            --    set up the ones that are useful for you.
-            -- 'rafamadriz/friendly-snippets',
-        },
-        config = function()
-            -- See `:help cmp`
-            local cmp = require("cmp")
-            local luasnip = require("luasnip")
-            luasnip.config.setup({})
-
-            cmp.setup({
-                snippet = {
-                    expand = function(args)
-                        luasnip.lsp_expand(args.body)
-                    end,
-                },
-                completion = { completeopt = "menu,menuone,noinsert" },
-
-                -- For an understanding of why these mappings were
-                -- chosen, you will need to read `:help ins-completion`
-                --
-                -- No, but seriously. Please read `:help ins-completion`, it is really good!
-                mapping = cmp.mapping.preset.insert({
-                    -- Select the [n]ext item
-                    ["<C-n>"] = cmp.mapping.select_next_item(),
-                    -- Select the [p]revious item
-                    ["<C-p>"] = cmp.mapping.select_prev_item(),
-
-                    -- Accept ([y]es) the completion.
-                    --  This will auto-import if your LSP supports it.
-                    --  This will expand snippets if the LSP sent a snippet.
-                    ["<C-y>"] = cmp.mapping.confirm({ select = true }),
-
-                    -- Manually trigger a completion from nvim-cmp.
-                    --  Generally you don't need this, because nvim-cmp will display
-                    --  completions whenever it has completion options available.
-                    ["<C-Space>"] = cmp.mapping.complete({}),
-
-                    -- Think of <c-l> as moving to the right of your snippet expansion.
-                    --  So if you have a snippet that's like:
-                    --  function $name($args)
-                    --    $body
-                    --  end
-                    --
-                    -- <c-l> will move you to the right of each of the expansion locations.
-                    -- <c-h> is similar, except moving you backwards.
-                    ["<C-l>"] = cmp.mapping(function()
-                        if luasnip.expand_or_locally_jumpable() then
-                            luasnip.expand_or_jump()
-                        end
-                    end, { "i", "s" }),
-                    ["<C-h>"] = cmp.mapping(function()
-                        if luasnip.locally_jumpable(-1) then
-                            luasnip.jump(-1)
-                        end
-                    end, { "i", "s" }),
-                }),
-                sources = {
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                    { name = "path" },
-                    { name = "lazydev", group_index = 0 },
-                },
-            })
-        end,
-    },
-    -- }}} nvim-cmp
-
-    -- gruvbox (Colorscheme): {{{
-    {
-        "sainnhe/gruvbox-material",
-        lazy = false,
-        priority = 1000,
-        config = function()
-            vim.api.nvim_create_autocmd("ColorScheme", {
-                group = vim.api.nvim_create_augroup("config.colorscheme", { clear = false }),
-                pattern = "gruvbox-material",
-                desc = "Update custom highlight groups when colorscheme is set",
-                callback = function()
-                    vim.cmd[[
-                        let s:configuration = gruvbox_material#get_configuration()
-                        let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
-
-                        call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
-                        call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
-                        call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
-                        call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
-                    ]]
-                end,
-            })
-
-            vim.api.nvim_create_autocmd("OptionSet", {
-                group = vim.api.nvim_create_augroup("config.colorscheme", { clear = false }),
-                pattern = "background",
-                desc = "Update custom highlight groups when 'background' changes",
-                callback = function()
-                    vim.cmd[[
-                        let s:configuration = gruvbox_material#get_configuration()
-                        let s:palette = gruvbox_material#get_palette( s:configuration.background, s:configuration.foreground, s:configuration.colors_override)
-
-                        call gruvbox_material#highlight('TabNum', s:palette.fg0, s:palette.bg1)
-                        call gruvbox_material#highlight('TabNumSel', s:palette.green, s:palette.bg1, 'bold')
-                        call gruvbox_material#highlight('TabLine', s:palette.grey0, s:palette.bg1)
-                        call gruvbox_material#highlight('TabLineSel', s:palette.green, s:palette.bg1)
-                    ]]
-                end,
-            })
-
-            vim.cmd[[
-                let g:gruvbox_material_foreground = 'original'
-                let g:gruvbox_material_disable_italic_comment = 1
-                let g:gruvbox_material_ui_contrast = 'high'
-
-                colorscheme gruvbox-material
-
-                highlight! link ModeMsg MoreMsg
-                highlight! link TSPunctBracket TSOperator
-            ]]
-        end,
-    },
-    -- }}} colorscheme
-
-    -- todo-comments: {{{
-    {
-        "folke/todo-comments.nvim",
-        event = "VimEnter",
-        dependencies = { "nvim-lua/plenary.nvim" },
-        opts = { signs = true },
-    },
-    -- }}} todo-comments
-
-    -- treesitter: {{{
-    { -- Highlight, edit, and navigate code
-        "nvim-treesitter/nvim-treesitter",
-        build = ":TSUpdate",
-        main = "nvim-treesitter.configs",
-        opts = {
-            ensure_installed = { },
-            -- Autoinstall languages that are not installed
-            auto_install = true,
-            highlight = {
-                enable = true,
-                disable = { "tmux" },
-            },
-            indent = { enable = true },
-        },
-    },
-    -- }}} treesitter
+local gh = function(x) return 'https://github.com/' .. x end
+vim.pack.add({
+    { src = gh("tpope/vim-sleuth") },
+    { src = gh("lewis6991/gitsigns.nvim") },
+    -- { src = gh("lewis6991/async.nvim") },
+    { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
 })
+
+-- GitSigns Configuration: {{{
+require("gitsigns").setup({
+    current_line_blame = true,
+})
+
+vim.keymap.set("n", "]c", function()
+    if vim.o.diff then
+        vim.cmd[[ norm! ]c ]]
+    end
+    require("gitsigns").nav_hunk("next")
+end, { desc = "Jump to next hunk", })
+
+vim.keymap.set("n", "[c", function()
+    if vim.o.diff then
+        vim.cmd[[ norm! [c ]]
+    end
+    require("gitsigns").nav_hunk("prev")
+end, { desc = "Jump to next hunk", })
+-- }}} GitSigns Configuration
+
+-- nvim-treesitter Configuration: {{{
+local nvim_treesitter_installed = vim.o.runtimepath:match("nvim%-treesitter")
+
+local ts_available = {}
+
+if nvim_treesitter_installed then
+    -- Mark available all the languages that are unstable or better
+    ts_available = require("nvim-treesitter").get_available(2)
+end
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = "*",
+    desc = "Start tree-sitter highlighting for all filetypes",
+    group = vim.api.nvim_create_augroup("config-treesitter-start", { clear = true }),
+    callback = function(ev)
+        -- ev.match is the filetype
+        if ev.match == "" then
+            vim.treesitter.stop()
+            return
+        end
+
+        local installed
+        local lang_for_ft = vim.treesitter.language.get_lang(ev.match)
+        local parser_lib = lang_for_ft .. ".so"
+        local installed_parsers = vim.api.nvim_get_runtime_file('parser/*', true)
+
+        for _, parser in pairs(installed_parsers) do
+            installed = installed or parser:match(parser_lib)
+        end
+
+        if installed then
+            -- Need to re-enable to make sure it triggers the new language
+            vim.treesitter.start()
+            return
+        end
+
+        -- Scan available languages and try installing if it's available
+        local matched_lang
+        for _, lang in pairs(ts_available) do
+            if lang == lang_for_ft then
+                matched_lang = lang
+            end
+        end
+
+        if matched_lang then
+            vim.print("Parser available for language, attempting to install...")
+            -- Goal was to make this plugin agnostic but doesn't seem like it will be easily
+            -- possible
+            if nvim_treesitter_installed then
+                local ret = require("nvim-treesitter.async").arun(function()
+                    local task = require("nvim-treesitter").install(matched_lang)
+                    local ret = require("nvim-treesitter.async").await(task)
+                    if ret then
+                        -- Needed here to prevent triggering until after install is complete
+                        vim.print("Installed parser with nvim-treesitter. Enabling...")
+                        vim.treesitter.start()
+                    end
+                    return ret
+                end)
+                -- Doesn't work due to lack of wait/await above. Cannot get that to work
+                -- asynchronously though
+                if ret then return true end
+            end
+        end
+
+        vim.print("Parser could not be installed for '" .. lang_for_ft .. " (" .. ev.match .. ")".. "'. Disabling tree-sitter...")
+        vim.treesitter.stop()
+    end,
+})
+-- }}} nvim-treesitter Configuration
 
 -- }}} Install and Configure Plugins
 
 -- }}} Plugins
+
+vim.cmd[[ colorscheme retrobox ]]
 
 -- vim: fdm=marker
