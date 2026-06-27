@@ -8,6 +8,9 @@ require("win.smart_rules")
 -- Set window title to Neovim title
 vim.o.title = true
 
+-- Set GUI font
+vim.o.guifont = "JetBrainsMono Nerd Font, DejaVu Sans Mono, Courier New:h13"
+
 -- Open man pages in vertical window
 vim.g.ft_man_open_mode = "vert"
 
