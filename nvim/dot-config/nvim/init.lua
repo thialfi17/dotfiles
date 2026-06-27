@@ -336,6 +336,16 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
     end,
 })
 
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "directory",
+    desc = "Make directory buffers unlisted",
+    group = vim.api.nvim_create_augroup("config-filetype-directory", { clear = true }),
+    callback = function()
+        vim.bo.buflisted = false
+    end,
+})
+
+-- Show highlighted region briefly
 vim.api.nvim_create_autocmd("TextYankPost", {
     desc = "Highlight when yanking text",
     group = vim.api.nvim_create_augroup("config-highlight-yank", { clear = true }),
