@@ -734,6 +734,17 @@ end
 
 -- }}}
 
+-- GUI Configuration: {{{
+if neovide then
+    vim.g.neovide_cursor_animation_length = 0
+    vim.g.neovide_scroll_animation_length = 0.1
+    vim.g.neovide_scroll_animation_far_lines = 10
+    vim.g.neovide_opacity = 0.99
+    vim.g.neovide_progress_bar_animation_speed = 1
+end
+
+-- }}} GUI Configuration
+
 -- Plugins: {{{
 
 -- Builtin: {{{
@@ -761,6 +772,8 @@ vim.keymap.set({"n", "t"}, "<M-S-z>", function() require("zenmode").toggle({show
 -- }}} Mine
 
 -- Install and Configure Plugins: {{{
+
+-- Install Plugins: {{{
 local gh = function(x) return 'https://github.com/' .. x end
 vim.pack.add({
     { src = gh("tpope/vim-sleuth") },
@@ -768,6 +781,7 @@ vim.pack.add({
     -- { src = gh("lewis6991/async.nvim") },
     { src = gh("nvim-treesitter/nvim-treesitter"), version = "main" },
 })
+-- }}} Install Plugins
 
 -- GitSigns Configuration: {{{
 require("gitsigns").setup({
@@ -801,26 +815,27 @@ end
 
 local blacklisted_fts = {
     "gitcommit",
+    "directory",
 }
 vim.api.nvim_create_autocmd('FileType', {
     pattern = "*",
     desc = "Start tree-sitter highlighting for all filetypes",
     group = vim.api.nvim_create_augroup("config-treesitter-start", { clear = true }),
     callback = function(ev)
-        -- ev.match is the filetype
-        if ev.match == "" then
+        local filetype = ev.match
+        if filetype == "" then
             vim.treesitter.stop()
             return
         end
         for _, v in pairs(blacklisted_fts) do
-            if ev.match == v then
+            if filetype == v then
                 vim.treesitter.stop()
                 return
             end
         end
 
         local installed
-        local lang_for_ft = vim.treesitter.language.get_lang(ev.match)
+        local lang_for_ft = vim.treesitter.language.get_lang(filetype)
         local parser_lib = lang_for_ft .. ".so"
         local installed_parsers = vim.api.nvim_get_runtime_file('parser/*', true)
 
@@ -863,7 +878,7 @@ vim.api.nvim_create_autocmd('FileType', {
             end
         end
 
-        vim.print("Parser could not be installed for '" .. lang_for_ft .. " (" .. ev.match .. ")".. "'. Disabling tree-sitter...")
+        vim.print("Parser could not be installed for '" .. lang_for_ft .. " (" .. filetype .. ")".. "'. Disabling tree-sitter...")
         vim.treesitter.stop()
     end,
 })
