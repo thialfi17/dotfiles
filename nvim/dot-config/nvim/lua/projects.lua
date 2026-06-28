@@ -160,8 +160,7 @@ M.choose_project = function ()
 
             M.load_workarea(workarea)
         end)
-
-        return win
+        vim.api.nvim_set_current_win(win)
     end)
 end
 

@@ -92,14 +92,16 @@ M.list = function (title, items, cb, opts)
             if vim.api.nvim_win_is_valid(window_id) then
                 vim.api.nvim_win_close(window_id, false)
             end
-            local win
-            vim.api.nvim_win_call(src_win, vim.schedule_wrap(function ()
-                -- schedule needed https://github.com/neovim/neovim/issues/19614
-                -- Presumably something is triggering textlock. Maybe closing the window?
-                win = cb(line_nr)
-            end))
-            if win then
-                vim.api.nvim_set_current_win(win)
+
+            if not vim.api.nvim_win_is_valid(src_win) then
+                vim.notify("Source window from popup creation has gone away. Callback may not behave as expected.", vim.log.levels.WARN)
+                cb(line_nr)
+            else
+                vim.api.nvim_win_call(src_win, vim.schedule_wrap(function ()
+                    -- schedule needed https://github.com/neovim/neovim/issues/19614
+                    -- Presumably something is triggering textlock. Maybe closing the window?
+                    cb(line_nr)
+                end))
             end
         end
     })
