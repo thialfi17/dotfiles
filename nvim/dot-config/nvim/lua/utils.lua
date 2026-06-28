@@ -94,13 +94,13 @@ M.split_command = function (cmd)
     return res
 end
 
----@param path string Path with optional wildcards to scan and generate a list of paths
+---@param path string Path with optional wildcards to scan and generate a list of paths. Path is normalized before use.
 ---@param filter? fun(name: string, type: string):boolean Function used to filter path results based on item path and type
 ---@return nil|fun(): string
 M.scan = function(path, filter)
-    -- Replace multiple "*" with a single char to avoid repeats due to
-    -- recursive nature of this function
-    path = path:gsub("%*+", "*")
+    -- Normalize and replace multiple "*" with a single char to avoid repeats due to recursive
+    -- nature of this function. Normalize also expands environment variables and tilde.
+    path = vim.fs.normalize(path):gsub("%*+", "*")
 
     local fun
 
@@ -127,7 +127,7 @@ M.scan = function(path, filter)
 
         -- Check if base_dir exists - if not exit early
         if vim.uv.fs_stat(base_dir) == nil then
-            error("Project base directory does not exist: " .. base_dir)
+            vim.notify("Project base directory does not exist: " .. base_dir, vim.log.levels.WARN)
             return
         end
 

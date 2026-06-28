@@ -310,6 +310,7 @@ vim.keymap.set({ "ca" }, "ln", "lnext", {})
 local dont_restore_fts = {
     "gitcommit",
     "gitrebase",
+    "",
 }
 vim.api.nvim_create_autocmd("BufWinEnter", {
     desc = "Restore previous cursor position when loading a file",
@@ -332,7 +333,7 @@ vim.api.nvim_create_autocmd("BufWinEnter", {
         vim.cmd("norm! zv")
 
         if pos.row == vim.api.nvim_buf_line_count(0) - 1 then
-            vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<C-e>", true, false, true), "n", false)
+            vim.api.nvim_input("<C-e>")
         else
         vim.cmd("norm! zz")
         end
