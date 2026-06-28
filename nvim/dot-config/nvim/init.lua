@@ -799,6 +799,9 @@ if nvim_treesitter_installed then
     ts_available = require("nvim-treesitter").get_available(2)
 end
 
+local blacklisted_fts = {
+    "gitcommit",
+}
 vim.api.nvim_create_autocmd('FileType', {
     pattern = "*",
     desc = "Start tree-sitter highlighting for all filetypes",
@@ -808,6 +811,12 @@ vim.api.nvim_create_autocmd('FileType', {
         if ev.match == "" then
             vim.treesitter.stop()
             return
+        end
+        for _, v in pairs(blacklisted_fts) do
+            if ev.match == v then
+                vim.treesitter.stop()
+                return
+            end
         end
 
         local installed
