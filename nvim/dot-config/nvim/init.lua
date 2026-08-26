@@ -816,6 +816,7 @@ end
 local blacklisted_fts = {
     "gitcommit",
     "directory",
+    "ghostty",
 }
 vim.api.nvim_create_autocmd('FileType', {
     pattern = "*",
@@ -840,13 +841,11 @@ vim.api.nvim_create_autocmd('FileType', {
         local installed_parsers = vim.api.nvim_get_runtime_file('parser/*', true)
 
         for _, parser in pairs(installed_parsers) do
-            installed = installed or parser:match(parser_lib)
-        end
-
-        if installed then
-            -- Need to re-enable to make sure it triggers the new language
-            vim.treesitter.start()
-            return
+            if parser:match(parser_lib) then
+                -- Need to re-enable to make sure it triggers the new language
+                vim.treesitter.start()
+                return
+            end
         end
 
         -- Scan available languages and try installing if it's available
