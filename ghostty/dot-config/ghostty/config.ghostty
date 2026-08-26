@@ -1,0 +1,40 @@
+font-family = JetBrains Mono
+font-size = 13
+
+window-decoration = auto
+
+# Don't send shift-mouse click to programs
+mouse-shift-capture = false
+
+background-opacity = 0.95
+background-blur = true
+# Make cells transparent even when opacity isn't set/supported by the tool e.g. Neovim
+background-opacity-cells = false
+
+# Remove all default keybindings
+keybind = clear
+keybind = performable:escape=end_search
+keybind = performable:copy=copy_to_clipboard:mixed
+keybind = performable:paste=paste_from_clipboard
+keybind = performable:ctrl+shift+v=paste_from_clipboard
+keybind = performable:ctrl+shift+c=copy_to_clipboard:mixed
+keybind = performable:ctrl+shift+n=new_window
+keybind = performable:ctrl+shift+t=new_tab
+keybind = performable:ctrl+equal=increase_font_size:1
+keybind = performable:ctrl+minus=increase_font_size:1
+keybind = performable:ctrl+0=reset_font_size
+keybind = performable:ctrl+shift+comma=reload_config
+keybind = performable:shift+page_up=scroll_page_up
+keybind = performable:shift+page_down=scroll_page_down
+keybind = performable:shift+home=scroll_to_top
+keybind = performable:shift+end=scroll_to_bottom
+keybind = performable:ctrl+page_up=previous_tab
+keybind = performable:ctrl+page_down=next_tab
+keybind = performable:ctrl+shift+arrow_up=goto_split:up
+keybind = performable:ctrl+shift+arrow_down=goto_split:down
+keybind = performable:ctrl+shift+arrow_left=goto_split:left
+keybind = performable:ctrl+shift+arrow_right=goto_split:right
+keybind = performable:ctrl+shift+9=new_split:right
+keybind = performable:ctrl+shift+0=new_split:down
+
+theme = Gruvbox Dark
